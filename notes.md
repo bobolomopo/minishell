@@ -5,7 +5,7 @@
 	* terminal in noncanonical mode (so we can detect ARROWS up an down key press) and echo off  (man termios)
 	* handles echoing back to the screen and editing the line.
 	* It basically replaces get_next_line by something much more complicated...
-	* Uses Termcaps to clear a line in the terminal, move cursor, etc. (functions: tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs)
+	* Uses Termcaps to clear a line in the terminal, move cursor, etc. 
 	* __how__: 
 		* for putting the terminal in noncanonical mode and disable echo, use functions tcsetattr, tcgetattr
 		* Termcaps fuctions: tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs
@@ -48,3 +48,9 @@
 	* how: for each command, except for the the builtins (echo, cd, pwd, export, unset, env, exit), it looks in the directories listed in the PATH environmental variable for the requested command. If found, it forks into a new process. The parent process waits (function wait) for the child to return (function exit). The child calls execve() with the command and the arguments.
 	* piping and redirections use functions dup, dup2 and pipe.
 	* the builtins are executed by the parent process (so, no fork). builtins are just functions called by the program?
+
+- ## Other stuff
+	* handling signals (ctrl+C, ctrl+\, etc)
+	* environmental variables 
+	* $?
+	* builtins (echo, cd, pwd, export, unset, env, exit)
