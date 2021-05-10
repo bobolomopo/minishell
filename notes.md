@@ -2,7 +2,7 @@
 
 - ## Prompt / line editing:
 	* __what is does__: reads from stdin, allowing navigation through the history of commands
-	* terminal in noncanonical mode (so we can detect ARROWS up an down key press) and echo off 
+	* terminal in noncanonical mode (so we can detect ARROWS up an down key press) and echo off  (man termios)
 	* handles echoing back to the screen and editing the line.
 	* It basically replaces get_next_line by something much more complicated...
 	* Uses Termcaps to clear a line in the terminal, move cursor, etc. (functions: tgetent, tgetflag, tgetnum, tgetstr, tgoto, tputs)
