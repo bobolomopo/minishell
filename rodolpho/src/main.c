@@ -21,8 +21,10 @@ void	exec_command(char **argv, char **envp)
 		printf("%s\n", strerror(errno)); // error messages show go to stdout...
 	}
 	else				// parent process
+	{
 		wait(&stat_loc);
 		free(path);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
