@@ -25,3 +25,8 @@ fclean:		clean
 			rm -f $(NAME) $(LIBFT)
 
 re:			fclean all 
+
+pipes:		src/pipes.o $(LIBFT)
+			$(CC) $(FLAGS) $< -lft -L../libft -o $@
+			
+	
