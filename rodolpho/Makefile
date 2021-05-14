@@ -4,7 +4,7 @@ OBJ = $(SRC:.c=.o)
 LIBFT = ../libft/libft.a
 INCLUDE = -I. -I../libft
 CC = gcc
-FLAGS = -Wall -Wextra -Werror
+FLAGS = -Wall -Wextra -Werror -g
 NAME = minishell
 
 all:		$(NAME)
@@ -28,5 +28,7 @@ re:			fclean all
 
 pipes:		src/pipes.o $(LIBFT)
 			$(CC) $(FLAGS) $< -lft -L../libft -o $@
-			
-	
+
+OBJ_LC = src/launch_command.o src/resolve_path.o src/error.o
+launch_command:	$(LIBFT) $(OBJ_LC)
+			$(CC) $(FLAGS) $(OBJ_LC) -lft -L../libft -o $@

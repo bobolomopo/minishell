@@ -3,7 +3,7 @@
 void	exec_command(char **argv, char **envp)
 {
 	pid_t	pid_child;
-	int		stat_loc;
+	int		status;
 	char	*path;
 
 	if (argv[0] == NULL)
@@ -18,12 +18,13 @@ void	exec_command(char **argv, char **envp)
 	if (pid_child == 0)	// child process
 	{
 		execve(path, argv, envp);
-		printf("%s\n", strerror(errno)); // error messages show go to stdout...
+		printf("%s\n", strerror(errno)); // error messages should go to stdout...
 	}
 	else				// parent process
 	{
-		wait(&stat_loc);
+		wait(&status);
 		free(path);
+		// update "?" variable using macros from wait
 	}
 }
 

@@ -15,30 +15,50 @@ char	*assemble_path(char *dir, char *file)
 	return (str);
 }
 
-// returns a freeable string containing the complete file path 
-// (absolute or relative)
-char	*resolve_path(char *command)
+// if command contais "/" or if the binary is found in a PATH directory, return 1 and a
+// a freeable string to path
+// return 0 if binary not found
+// return -1 if error
+int	resolve_path(char *command, char **path)
 {
 	char		**path_dirs;
 	char		*env_path;
-	char		*path;
 	int			i;
 	struct stat	buf;
 
-	if (ft_strchr(command, '/')) // if command contains '/', don't search in the PATH dirs
-		return (ft_strdup(command));
-	env_path = getenv("PATH"); // TODO: check if NULL
-	path_dirs = ft_split(env_path, ':'); // TODO: check if error
+	if (ft_strchr(command, '/'))
+	{
+		*path = ft_strdup(command);
+		if (*path)
+			return (-1);
+		return (1);
+	}
+	env_path = getenv("PATH");
+	if (env_path == NULL)
+	{
+		*path = NULL;
+		return (0);
+	}
+	path_dirs = ft_split(env_path, ':');
+	if (!path_dirs)
+		return (-1);
 	i = 0;
 	while (path_dirs[i])
 	{
-		path = assemble_path(path_dirs[i], command);
-		if (stat(path, &buf) == 0)
-			break ;
-		free(path);
-		path = NULL;
+		*path = assemble_path(path_dirs[i], command); // check if error
+		if (!*path)
+		{
+			ft_free_split(path_dirs);
+			return (-1);
+		}
+		if (stat(*path, &buf) == 0)
+		{
+			ft_free_split(path_dirs);
+			return (1);
+		}
+		free(*path);
 		i++;
 	}
 	ft_free_split(path_dirs);
-	return (path);
+	return (0);
 }

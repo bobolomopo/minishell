@@ -8,6 +8,28 @@
 # include <sys/stat.h>
 # include <string.h>
 # include "libft.h"
+# include <fcntl.h>
+
+typedef struct s_redirection
+{
+	int		n;
+	int		op;
+	char	*file;
+}				t_redirection;
+
+enum	redirection_operators
+{
+	re_input,			// <
+	re_output,			// >
+	re_output_append	// >>
+};
+
+typedef struct	s_command
+{
+	char	**argv;
+	t_list	*redirections;
+}				t_command;
+
 
 typedef struct	s_piped_commands
 {
@@ -17,6 +39,7 @@ typedef struct	s_piped_commands
 	int		out_file_truc;
 }				t_piped_commands;
 
-char	*resolve_path(char *command);
+int		resolve_path(char *command, char **path);
+void	ft_perror(char *func_name);
 
 #endif
