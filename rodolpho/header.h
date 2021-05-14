@@ -41,5 +41,6 @@ typedef struct	s_piped_commands
 
 int		resolve_path(char *command, char **path);
 void	ft_perror(char *func_name);
+int	launch_command(t_command *command, char **envp);
 
 #endif

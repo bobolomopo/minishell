@@ -1,5 +1,6 @@
 #include "header.h"
 
+// duplicates the file descriptors 0, 1 and 2, to be recovered later.
 int	backup_std_fds(int *fd)
 {
 	int	i;
@@ -20,6 +21,7 @@ int	backup_std_fds(int *fd)
 	return (0);
 }
 
+// restores stdin, stdout and stderr to the original file descriptors (0, 1, 2)
 int	restore_std_fds(int *fd)
 {
 	int	i;
@@ -40,6 +42,8 @@ int	restore_std_fds(int *fd)
 	return (ret_value);
 }
 
+// opens file in read or write mode (according to "op") and redirects 
+// the file descriptor n to this file
 int	make_redirection(int n, int op, char *file)
 {
 	int	fd;
@@ -65,6 +69,7 @@ int	make_redirection(int n, int op, char *file)
 	return (0);
 }
 
+// call make_redirection() for every redirection in the list
 int	process_redirections_list(t_list *lst)
 {
 	t_redirection	*r;
@@ -79,6 +84,7 @@ int	process_redirections_list(t_list *lst)
 	return (0);
 }
 
+// retuns 1 if the command is a builtin, 0 otherwise
 int	is_builtin(char *command_name)
 {
 	static char*	builtin[7] = {"echo", "cd", "pwd", "export", "unset",
@@ -103,6 +109,7 @@ int	call_builtin(char **argv, char **envp)
 	return (0);
 }
 
+// seach for the command in the PATH directories, forks and execs into the program
 int	exec_binary(char **argv, char **envp)
 {
 	pid_t	id;
@@ -127,57 +134,37 @@ int	exec_binary(char **argv, char **envp)
 	}
 	wait(&status);
 	free(path);
-	// update "?" variable using macros from wait
-	return (0);
+	if (WIFEXITED(status))
+		return (WEXITSTATUS(status));
+	// update "?" variable??
+	return (-1); // decide what to return...
 }
 
 // performs redirections, executes command and restores stdin, stdout and stderr
-int	launch_command(t_command command, char **envp)
+int	launch_command(t_command *command, char **envp)
 {
 	int	back_up_fds[3];
+	int	ret;
 
 	// backup stdin, stdout, stderr
 	if (backup_std_fds(back_up_fds) == -1)
 		return (-1);
 
 	// perform redirections
-	if (process_redirections_list(command.redirections) == -1)
+	if (process_redirections_list(command->redirections) == -1)
 	{
 		restore_std_fds(back_up_fds);
 		return (-1);
 	}
 
-	if (is_builtin(command.argv[0]))
-		call_builtin(command.argv, envp);
+	if (is_builtin(command->argv[0]))
+		ret = call_builtin(command->argv, envp);
 	else
-		exec_binary(command.argv, envp);
+		ret = exec_binary(command->argv, envp);
 			
-
 	// restore std fds.
-	return (restore_std_fds(back_up_fds));
+	if (restore_std_fds(back_up_fds) == -1)
+		return (-1);
+	return (ret);
 }
 
-int main(int argc, char **argv_main, char **envp)
-{
-	t_command	command;
-	t_list		*list;
-	char *argv[3] = {"cat", "-e", NULL};
-	t_redirection	red1 = {0, re_input, "infile"};
-	t_redirection	red2 = {1, re_output, "outfile"};
-	t_redirection	red3 = {1, re_output, "outfile1"};
-	t_redirection	red4 = {1, re_output, "outfile2"};
-
-	list = NULL;
-	ft_lstadd_back(&list, ft_lstnew(&red1));
-	ft_lstadd_back(&list, ft_lstnew(&red2));
-	ft_lstadd_back(&list, ft_lstnew(&red3));
-	ft_lstadd_back(&list, ft_lstnew(&red4));
-
-	command.argv = argv;
-	command.redirections = list;
-
-	(void)argc;
-	(void)argv_main;
-	launch_command(command, envp);
-	return (0);
-}
