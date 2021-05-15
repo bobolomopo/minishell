@@ -10,6 +10,12 @@
 # include "libft.h"
 # include <fcntl.h>
 
+typedef struct	s_command
+{
+	char	**argv;
+	t_list	*redirections;
+}				t_command;
+
 typedef struct s_redirection
 {
 	int		n;
@@ -17,30 +23,16 @@ typedef struct s_redirection
 	char	*file;
 }				t_redirection;
 
-enum	redirection_operators
+enum	redirection_ops
 {
 	re_input,			// <
 	re_output,			// >
 	re_output_append	// >>
 };
 
-typedef struct	s_command
-{
-	char	**argv;
-	t_list	*redirections;
-}				t_command;
-
-
-typedef struct	s_piped_commands
-{
-	t_list	*commands_lst;
-	char	*in_file;		// NULL if stdin
-	char	*out_file;		// NULL if stdout 
-	int		out_file_truc;
-}				t_piped_commands;
-
+int		launch_command(t_command *command, char **envp);
+int		run_pipeline(t_list *lst, char **envp, int n);
 int		resolve_path(char *command, char **path);
 void	ft_perror(char *func_name);
-int	launch_command(t_command *command, char **envp);
 
 #endif

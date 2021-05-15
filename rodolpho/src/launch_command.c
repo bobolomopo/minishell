@@ -168,3 +168,27 @@ int	launch_command(t_command *command, char **envp)
 	return (ret);
 }
 
+// int main(int argc, char **argv_main, char **envp)
+// {
+// 	t_command	command;
+// 	t_list		*list;
+// 	char *argv[3] = {"cat", "-e", NULL};
+// 	t_redirection	red1 = {0, re_input, "infile"};
+// 	t_redirection	red2 = {1, re_output, "outfile"};
+// 	t_redirection	red3 = {1, re_output, "outfile1"};
+// 	t_redirection	red4 = {1, re_output, "outfile2"};
+
+// 	list = NULL;
+// 	ft_lstadd_back(&list, ft_lstnew(&red1));
+// 	ft_lstadd_back(&list, ft_lstnew(&red2));
+// 	ft_lstadd_back(&list, ft_lstnew(&red3));
+// 	ft_lstadd_back(&list, ft_lstnew(&red4));
+
+// 	command.argv = argv;
+// 	command.redirections = list;
+
+// 	(void)argc;
+// 	(void)argv_main;
+// 	launch_command(&command, envp);
+// 	return (0);
+// }

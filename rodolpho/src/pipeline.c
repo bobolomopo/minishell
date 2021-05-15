@@ -1,6 +1,5 @@
 #include "header.h"
 
-
 void	update_last_exit(char **envp, int exit_code)
 {
 	// TODO
@@ -9,7 +8,7 @@ void	update_last_exit(char **envp, int exit_code)
 	(void)exit_code;
 }
 
-// pipe, fork, dup2
+// makes a pipe - fork - dup2 cycle
 // returns read_end of pipe or -1 if error
 int	send_to_pipe(t_command *comm, char **envp, int fd_in)
 {
@@ -68,30 +67,6 @@ int	run_pipeline(t_list *lst, char **envp, int n)
 		wait(NULL);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	return (0); // ???
+	return (0); // ??? what to return if command did not exit?
 }
 
-int main(int argc, char **argv_main, char **envp)
-{
-	t_command	command;
-	t_list		*list;
-	char *argv[3] = {"cat", "-e", NULL};
-	t_redirection	red1 = {0, re_input, "infile"};
-	t_redirection	red2 = {1, re_output, "outfile"};
-	t_redirection	red3 = {1, re_output, "outfile1"};
-	t_redirection	red4 = {1, re_output, "outfile2"};
-
-	list = NULL;
-	ft_lstadd_back(&list, ft_lstnew(&red1));
-	ft_lstadd_back(&list, ft_lstnew(&red2));
-	ft_lstadd_back(&list, ft_lstnew(&red3));
-	ft_lstadd_back(&list, ft_lstnew(&red4));
-
-	command.argv = argv;
-	command.redirections = list;
-
-	(void)argc;
-	(void)argv_main;
-	launch_command(&command, envp);
-	return (0);
-}
