@@ -16,5 +16,5 @@ int	main(int argc, char **argv)
 		write(1, "ZzzzZzzz\n", 9);
 		sleep(2);
 	}
-	return (0);
+	return (42);
 }
