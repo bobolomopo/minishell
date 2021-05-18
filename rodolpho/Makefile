@@ -1,16 +1,20 @@
-SRCS = error.c  launch_command.c  main.c  pipeline.c  resolve_path.c
+# SRCS = error.c  launch_command.c pipeline.c  resolve_path.c
+SRCS = main.c ft_readline.c
 SRC = $(addprefix src/,$(SRCS))
 OBJ = $(SRC:.c=.o)
 LIBFT = ../libft/libft.a
 INCLUDE = -I. -I../libft
 CC = gcc
-FLAGS = -Wall -Wextra -Werror -g
-NAME = executor
+FLAGS = -Wall -Wextra -Werror 
 
-all:		$(NAME)
+all:		minishell
 
-$(NAME):	 $(OBJ) $(LIBFT)
-			$(CC) $(FLAGS) $(OBJ) -lft -L../libft -o $@
+minishell:	$(LIBFT) $(OBJ)	
+			$(CC) $(FLAGS) $(OBJ) -lft -L../libft -ltermcap -o $@
+
+OBJ_TEST = $(OBJ) src/main4test.o
+test:		$(LIBFT) $(OBJ_TEST)
+			$(CC) $(FLAGS) $(OBJ_TEST) -lft -L../libft -o $@
 
 $(LIBFT):	
 			$(MAKE) all clean -C ../libft/

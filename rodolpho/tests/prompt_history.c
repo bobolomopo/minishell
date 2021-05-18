@@ -110,9 +110,9 @@ void	display_command(char *prompt, char *command, char *mv_cursor_cap, char *cl_
 
 int	main()
 {
+	char	*prompt = "prompt > ";
 	char	*history[4] = {"", "last command", "avant-dernier commande", "3rd last command"};
 	int		command_index;
-	char	*prompt = "prompt > ";
 	int		key;
 	struct termios	termios_p_backup;
 	int		ret;
@@ -129,10 +129,7 @@ int	main()
 	if (ret == -1)
 		return (1); // error
 
-	// display promt:
-	printf("Press ESC twice to exit program\n");
-	write(1, prompt, ft_strlen(prompt));
-
+	
 	command_index = 0;
 	while (1)
 	{

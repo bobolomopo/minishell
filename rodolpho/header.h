@@ -10,6 +10,20 @@
 # include "libft.h"
 # include <fcntl.h>
 
+#define ARROW_UP -1
+#define ARROW_DOWN -2
+
+typedef struct	s_termcaps
+{
+	char	*cl_line;
+	char	*cl_to_endline;
+	char	*mv_cursor_col1;
+	char	*mv_cursor_left;
+	// char	*enter_del_mode;
+	// char	*del_char;
+	// char	*exit_del_mode;
+}				t_termcaps;
+
 typedef struct	s_command
 {
 	char	**argv;
@@ -30,6 +44,8 @@ enum	redirection_ops
 	re_output_append	// >>
 };
 
+int		init_termcaps(t_termcaps *termcaps);
+int		ft_readline(char **line, t_list **history, t_termcaps termcaps);
 int		launch_command(t_command *command, char **envp);
 int		run_pipeline(t_list *lst, char **envp, int n);
 int		resolve_path(char *command, char **path);
