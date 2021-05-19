@@ -6,6 +6,9 @@ int	main(int argc, char **argv, char **envp)
 	t_list		*commands_list;
 	t_list		*history;
 	t_termcaps	termcaps;
+	char		**shell_env;
+
+	setup_env(&shell_env, envp);
 
 	// if interactive mode
 	history = NULL;
@@ -18,12 +21,13 @@ int	main(int argc, char **argv, char **envp)
 			break;
 		
 		parse_line(line, &commands_list); // lexer - parser- expander
-		execute_line(commands_list, envp); // execute all pipelines
+		execute_line(commands_list, shell_env); // execute all pipelines
 	
-		// clear commands list TODO
+		// clear commands list: TODO
 
 	}
 	ft_lstclear(&history, free);
+	ft_free_split(shell_env);
 
 	(void)argc;
 	(void)argv;

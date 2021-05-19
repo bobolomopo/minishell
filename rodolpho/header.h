@@ -19,7 +19,7 @@ typedef struct	s_termcaps
 	char	*cl_to_endline;
 	char	*mv_cursor_col1;
 	char	*mv_cursor_left;
-	// char	*enter_del_mode;
+	// char	*enter_del_mode;   // I'll have to try those again
 	// char	*del_char;
 	// char	*exit_del_mode;
 }				t_termcaps;
@@ -44,18 +44,27 @@ enum	redirection_ops
 	re_output_append	// >>
 };
 
+// environment
+int		setup_env(char ***shell_env, char **envp);
+
+// command-line
 int		init_termcaps(t_termcaps *termcaps);
 int		ft_readline(char **line, t_list **history, t_termcaps termcaps);
 void	arrow_up(char *buffer, char **backup, t_list *history, t_list **position);
 void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position);
 
+// mini-parser (for tests)
 int		parse_line(char *line, t_list **commands_lst);
 
+// execution
 int		execute_line(t_list *lst, char **envp);
-
 int		launch_command(t_command *command, char **envp);
 int		run_pipeline(t_list *lst, char **envp, int n);
 int		resolve_path(char *command, char **path);
 void	ft_perror(char *func_name);
+
+// builtins
+int	builtin_env(char **argv, char **envp);
+int	builtin_echo(char **argv, char **envp);
 
 #endif

@@ -103,9 +103,14 @@ int	is_builtin(char *command_name)
 
 int	call_builtin(char **argv, char **envp)
 {
-	// TODO
-	(void)argv;
-	(void)envp;
+	// TODO: jump table (pointers to functions)
+	if (ft_strcmp(argv[0], "env") == 0)
+		return (builtin_env(argv, envp));	
+	if (ft_strcmp(argv[0], "echo") == 0)
+		return (builtin_echo(argv, envp));
+	
+	// TODO: other builtins
+
 	return (0);
 }
 
