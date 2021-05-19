@@ -1,0 +1,21 @@
+read_line:
+
+	find out escape sequences for ctrl-c, ctrl-d and ctrl-\
+	make command-line repond to them accordingly
+
+executor:
+
+	get return value from builtins and execd commands
+		(struct containing char **shell_env and the special variables?)
+	write builts
+		start by the env ones
+
+shell:
+
+	non-interactive shell case (use get_next_line)
+
+	signals: 
+		handle SIGINT and SIGQUIT in the shell (do not ignore)
+		return values for execd process that were signaled (128 + signal)
+			waitpd and its macros (see test)
+			
