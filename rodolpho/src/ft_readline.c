@@ -74,14 +74,12 @@ int	detect_key(void)
 			else if (buffer[1] == 'B')
 				return (ARROW_DOWN);
 		}
-		else
-			return (0);
 	}
 
 	// int key = buffer[0];
 	// printf("key value: %d\n", key);
 	
-	return (buffer[0]);
+	return (buffer[0]); // check if printable character?
 }
 
 void	add_to_buffer(int key, char *text_buffer)
@@ -91,6 +89,14 @@ void	add_to_buffer(int key, char *text_buffer)
 	*text_buffer = (char)key;
 	text_buffer++;
 	*text_buffer = '\0';
+}
+
+void	refresh_display(char *prompt, char *text_buffer, t_termcaps termcaps)
+{
+	tputs(termcaps.mv_cursor_col1, 1, ft_putchar_stdout);
+	tputs(termcaps.cl_line, 1, ft_putchar_stdout);
+	write(1, prompt, ft_strlen(prompt));
+	write(1, text_buffer, ft_strlen(text_buffer));
 }
 
 void	delete_last_char(char *text_buffer, t_termcaps termcaps)
@@ -124,13 +130,14 @@ int	ft_readline(char **line, t_list **history, t_termcaps termcaps)
 	struct termios	termios_p_backup;
 	char			*prompt = "prompt > ";
 	int				key;
-	char			text_buffer[100] = {'\0'};
-	t_list			*next_item_hist;
+	char			text_buffer[100] = {'\0'}; // TODO: autogrowing buffer on the heap, mind the history!
+	char			*backup_buffer;
+	t_list			*position;
 
 	if (setup_terminal(&termios_p_backup) == -1)
 		return (-1);
 
-	next_item_hist = *history;
+	position = NULL;
 	write(1, prompt, ft_strlen(prompt));
 	while (1)
 	{
@@ -142,9 +149,11 @@ int	ft_readline(char **line, t_list **history, t_termcaps termcaps)
 		}
 		if (key == ARROW_UP || key == ARROW_DOWN)
 		{
-			navigate_history(key, text_buffer, &next_item_hist, *history);
-			refresh_display(prompt, buffer); // TODO
-			
+			if (key == ARROW_UP)
+				arrow_up(text_buffer, &backup_buffer, *history, &position);
+			else
+				arrow_down(text_buffer, &backup_buffer, *history, &position);
+			refresh_display(prompt, text_buffer, termcaps);
 		}
 		else
 		{

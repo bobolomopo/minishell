@@ -1,15 +1,5 @@
 #include "header.h"
 
-void display_history(t_list *lst)
-{
-	printf("History of commands:\n");
-	while (lst)
-	{
-		printf("%s\n", lst->content);
-		lst = lst->next;
-	}
-}
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
@@ -32,7 +22,6 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_strcmp(line, "exit") == 0) // for testing
 			break;
 	}
-	display_history(history);
 	ft_lstclear(&history, free);
 
 	(void)commands_list;
