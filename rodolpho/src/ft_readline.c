@@ -111,7 +111,6 @@ void	delete_last_char(char *text_buffer, t_termcaps termcaps)
 	text_buffer--;
 	*text_buffer = '\0';
 
-	(void)termcaps;
 }
 
 int	add_to_history(char *line, t_list **history)

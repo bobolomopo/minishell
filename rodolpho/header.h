@@ -48,6 +48,11 @@ int		init_termcaps(t_termcaps *termcaps);
 int		ft_readline(char **line, t_list **history, t_termcaps termcaps);
 void	arrow_up(char *buffer, char **backup, t_list *history, t_list **position);
 void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position);
+
+int		parse_line(char *line, t_list **commands_lst);
+
+int		execute_line(t_list *lst, char **envp);
+
 int		launch_command(t_command *command, char **envp);
 int		run_pipeline(t_list *lst, char **envp, int n);
 int		resolve_path(char *command, char **path);

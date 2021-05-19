@@ -13,20 +13,19 @@ int	main(int argc, char **argv, char **envp)
 	{
 		init_termcaps(&termcaps);
 		ft_readline(&line, &history, termcaps); // display prompt and readline
-		// parse_line(line, &commands_list); // lexer - parser- expander
-		// free(line);
-		// ft_lstclear(&commands_list, NULL);
-		// execute_line(); // execute all pipelines
-
 
 		if (ft_strcmp(line, "exit") == 0) // for testing
 			break;
+		
+		parse_line(line, &commands_list); // lexer - parser- expander
+		execute_line(commands_list, envp); // execute all pipelines
+	
+		// clear commands list TODO
+
 	}
 	ft_lstclear(&history, free);
 
-	(void)commands_list;
 	(void)argc;
 	(void)argv;
-	(void)envp;
 }
 

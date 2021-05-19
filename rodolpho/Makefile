@@ -1,5 +1,5 @@
-# SRCS = error.c  launch_command.c pipeline.c  resolve_path.c
-SRCS = main.c ft_readline.c navigate_history.c
+SRCS = main.c ft_readline.c navigate_history.c miniparser.c execute.c \
+		error.c  launch_command.c pipeline.c  resolve_path.c
 SRC = $(addprefix src/,$(SRCS))
 OBJ = $(SRC:.c=.o)
 LIBFT = ../libft/libft.a
