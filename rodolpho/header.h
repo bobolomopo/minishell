@@ -9,9 +9,20 @@
 # include <string.h>
 # include "libft.h"
 # include <fcntl.h>
+# include <signal.h>
 
 #define ARROW_UP -1
 #define ARROW_DOWN -2
+
+typedef	struct	s_cmdline
+{
+	char	text_buffer[100];
+	char	*backup_buffer;
+	char	prompt[20];
+	t_list	*position;
+	int		readline_mode;
+
+}				t_cmdline;
 
 typedef struct	s_termcaps
 {
@@ -44,8 +55,14 @@ enum	redirection_ops
 	re_output_append	// >>
 };
 
+// global variable for signal handling
+void	*g_ptr;
+
 // environment
 int		setup_env(char ***shell_env, char **envp);
+
+// signal handling
+void	signal_handler_c(int signal_code);
 
 // command-line
 int		init_termcaps(t_termcaps *termcaps);

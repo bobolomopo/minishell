@@ -24,10 +24,11 @@ int	backup_buffer(char *buffer, char **backup)
 	return (0);
 }
 
-void	restore_buffer(char *buffer, char *backup_buffer)
+void	restore_buffer(char *buffer, char **backup_buffer)
 {
-	ft_strlcpy(buffer, backup_buffer, 100);
-	free(backup_buffer);
+	ft_strlcpy(buffer, *backup_buffer, 100);
+	free(*backup_buffer);
+	*backup_buffer = NULL;
 }
 
 void	arrow_up(char *buffer, char **backup, t_list *history, t_list **position)
@@ -35,7 +36,10 @@ void	arrow_up(char *buffer, char **backup, t_list *history, t_list **position)
 	if (*position == NULL) // current command, not in history
 	{
 		backup_buffer(buffer, backup); //TODO: handle error
-		(*position) = history;
+		if (history)
+			(*position) = history;
+		else		// if history is empty, last line cannot be run...
+			return ;
 	}
 	else if ((*position)->next == NULL) // last item in history
 		return ;
@@ -50,7 +54,7 @@ void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position)
 		return ;
 	if (*position == history) // first item in history
 	{
-		restore_buffer(buffer, *backup);
+		restore_buffer(buffer, backup);
 		*position = NULL;
 		return ;
 	}

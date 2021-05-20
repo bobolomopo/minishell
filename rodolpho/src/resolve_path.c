@@ -29,7 +29,7 @@ int	resolve_path(char *command, char **path)
 	if (ft_strchr(command, '/'))
 	{
 		*path = ft_strdup(command);
-		if (*path)
+		if (!*path)
 			return (-1);
 		return (1);
 	}

@@ -124,48 +124,55 @@ int	add_to_history(char *line, t_list **history)
 	return (0);
 }
 
+void	initialize_cmdline(t_cmdline *cmdline)
+{
+	cmdline->text_buffer[0] = '\0';
+	cmdline->backup_buffer = NULL;
+	ft_strlcpy(cmdline->prompt, "prompt > ", 20); 
+	cmdline->position = NULL;
+}
+
 int	ft_readline(char **line, t_list **history, t_termcaps termcaps)
 {
 	struct termios	termios_p_backup;
-	char			*prompt = "prompt > ";
 	int				key;
-	char			text_buffer[100] = {'\0'}; // TODO: autogrowing buffer on the heap, mind the history!
-	char			*backup_buffer;
-	t_list			*position;
+	t_cmdline		cmdline;
 
 	if (setup_terminal(&termios_p_backup) == -1)
 		return (-1);
+	initialize_cmdline(&cmdline);
+	g_ptr = &cmdline; // the signalhandler has access to cmdline via the global variable
 
-	position = NULL;
-	write(1, prompt, ft_strlen(prompt));
+	write(1, cmdline.prompt, ft_strlen(cmdline.prompt));
 	while (1)
 	{
 		key = detect_key();
 		if (key == 127) // backspace key
 		{
-			delete_last_char(text_buffer, termcaps);
+			delete_last_char(cmdline.text_buffer, termcaps);
 			continue ;
 		}
 		if (key == ARROW_UP || key == ARROW_DOWN)
 		{
 			if (key == ARROW_UP)
-				arrow_up(text_buffer, &backup_buffer, *history, &position);
+				arrow_up(cmdline.text_buffer, &cmdline.backup_buffer, *history, &cmdline.position);
 			else
-				arrow_down(text_buffer, &backup_buffer, *history, &position);
-			refresh_display(prompt, text_buffer, termcaps);
+				arrow_down(cmdline.text_buffer, &cmdline.backup_buffer, *history, &cmdline.position);
+			refresh_display(cmdline.prompt, cmdline.text_buffer, termcaps);
 		}
 		else
 		{
 			write(1, &key, 1); // echo to screen
 			if (key == '\n') // return key
 				break ;	
-			add_to_buffer(key, text_buffer);
+			add_to_buffer(key, cmdline.text_buffer);
 		}
 	}
-	*line = ft_strdup(text_buffer);
+	*line = ft_strdup(cmdline.text_buffer);
 	add_to_history(*line, history);
 	
 	tcsetattr(0, 0, &termios_p_backup); // recover terminal settings
 
+	g_ptr = NULL;
 	return (0);
 }

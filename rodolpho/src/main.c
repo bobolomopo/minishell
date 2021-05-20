@@ -1,5 +1,6 @@
 #include "header.h"
 
+
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
@@ -8,14 +9,17 @@ int	main(int argc, char **argv, char **envp)
 	t_termcaps	termcaps;
 	char		**shell_env;
 
+	signal(SIGINT, signal_handler_c); // maybe only if in interactive mode?
 	setup_env(&shell_env, envp);
 
 	// if interactive mode
 	history = NULL;
+	init_termcaps(&termcaps);
 	while (1)
 	{
-		init_termcaps(&termcaps);
 		ft_readline(&line, &history, termcaps); // display prompt and readline
+		if (!line)
+			continue ;
 
 		if (ft_strcmp(line, "exit") == 0) // for testing
 			break;

@@ -13,9 +13,9 @@ executor:
 shell:
 
 	non-interactive shell case (use get_next_line)
+		istty function
 
 	signals: 
 		handle SIGINT and SIGQUIT in the shell (do not ignore)
 		return values for execd process that were signaled (128 + signal)
 			waitpd and its macros (see test)
-			
