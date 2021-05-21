@@ -1,5 +1,8 @@
 read_line:
 
+	deal with arrows left\right, ctrl-l
+
+	ctrl-c, ctrl-d, ctrl-\
 	for some reason:
 		read() does not read anything when ctr-c is pressed. SIGINT is sent.
 			a non-builtcommand will be terminated by this signal, and the
@@ -9,8 +12,8 @@ read_line:
 			will be terminated by the signal. 
 			The shell with display "Quit: 3\n"
 			and the return value will be 131 (128 + 3)
-
 		read() reads 4 when ctrl-d is pressed.
+
 
 
 executor:
@@ -29,3 +32,4 @@ shell:
 		handle SIGINT and SIGQUIT in the shell (do not ignore)
 		return values for execd process that were signaled (128 + signal)
 			waitpd and its macros (see test)
+		-->	should I implement any other signal handler other than SIGINT and SIGQUIT ?

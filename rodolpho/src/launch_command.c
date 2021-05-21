@@ -127,21 +127,29 @@ int	exec_binary(char **argv, char **envp)
 		return (-1);
 	if (ret == 0)
 	{
-		printf("minishell: %s: command not found\n", argv[0]); // gotta print it to stderr...
-		return (1); // maybe a code different than error?
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(argv[0], 2);
+		ft_putendl_fd(": command not found", 2);
+		return (127);
 	}
 	id = fork();
 	if (id == 0)	// child process
 	{
 		execve(path, argv, envp);
-		printf("%s\n", strerror(errno)); // error messages should go to stdout...
-		exit(1);
+		ft_putstr_fd("minishell: ", 2);
+		ft_perror(path);
+		exit(127); // or 126 if command found but not executable
 	}
-	wait(&status);
+	wait(&status); // should I use waitpid instead?
 	free(path);
 	if (WIFEXITED(status))
 		return (WEXITSTATUS(status));
-	// update "?" variable??
+	if (WIFSIGNALED(status))
+	{
+		if (WTERMSIG(status) == 3)
+			ft_putendl_fd("Quit: 3", 1); // stdin or stdout??
+		return (128 + WTERMSIG(status));
+	}
 	return (-1); // decide what to return...
 }
 
