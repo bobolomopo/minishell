@@ -101,15 +101,17 @@ int	is_builtin(char *command_name)
 	return (0);
 }
 
-int	call_builtin(char **argv, char **envp)
+int	call_builtin(char **argv, t_shell_env *shell_env)
 {
 	// TODO: jump table (pointers to functions)
 	if (ft_strcmp(argv[0], "env") == 0)
-		return (builtin_env(argv, envp));	
+		return (builtin_env(argv, shell_env));	
 	if (ft_strcmp(argv[0], "echo") == 0)
-		return (builtin_echo(argv, envp));
+		return (builtin_echo(argv, shell_env));
 	if (ft_strcmp(argv[0], "pwd") == 0)
-		return (builtin_pwd(argv, envp));
+		return (builtin_pwd(argv, shell_env));
+	if (ft_strcmp(argv[0], "cd") == 0)
+		return (builtin_cd(argv, shell_env));
 	
 	// TODO: other builtins
 
@@ -156,7 +158,7 @@ int	exec_binary(char **argv, char **envp)
 }
 
 // performs redirections, executes command and restores stdin, stdout and stderr
-int	launch_command(t_command *command, char **envp)
+int	launch_command(t_command *command, t_shell_env *shell_env)
 {
 	int	back_up_fds[3];
 	int	ret;
@@ -173,9 +175,9 @@ int	launch_command(t_command *command, char **envp)
 	}
 
 	if (is_builtin(command->argv[0]))
-		ret = call_builtin(command->argv, envp);
+		ret = call_builtin(command->argv, shell_env);
 	else
-		ret = exec_binary(command->argv, envp);
+		ret = exec_binary(command->argv, shell_env->envp);
 			
 	// restore std fds.
 	if (restore_std_fds(back_up_fds) == -1)

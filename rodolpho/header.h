@@ -67,6 +67,8 @@ void	*g_ptr;
 
 // environment
 int		setup_env(t_shell_env *shell_env, char **envp);
+char	*find_var(char **env, char *var);
+int		set_var(t_shell_env *shell_env, char *var_name, char *value);
 
 // signal handling
 void	signal_handler_c(int signal_code);
@@ -83,14 +85,18 @@ int		parse_line(char *line, t_list **commands_lst);
 
 // execution
 int		execute_line(t_list *lst, t_shell_env *shell_env);
-int		launch_command(t_command *command, char **envp);
-int		run_pipeline(t_list *lst, char **envp, int n);
+int		launch_command(t_command *command, t_shell_env *shell_env);
+int		run_pipeline(t_list *lst, t_shell_env *shell_env, int n);
 int		resolve_path(char *command, char **path);
 void	ft_perror(char *func_name);
 
 // builtins
-int	builtin_env(char **argv, char **envp);
-int	builtin_echo(char **argv, char **envp);
-int	builtin_pwd(char **argv, char **envp);
+int	builtin_env(char **argv, t_shell_env *shell_env);
+int	builtin_echo(char **argv, t_shell_env *shell_env);
+int	builtin_pwd(char **argv, t_shell_env *shell_env);
+int	builtin_cd(char **argv, t_shell_env *shell_env);
+
+// new ft's for libft
+void	*ft_realloc(void *ptr, size_t size);
 
 #endif

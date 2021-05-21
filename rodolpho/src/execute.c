@@ -39,9 +39,9 @@ int	execute_line(t_list *lst, t_shell_env *shell_env)
 		if (n_commands == 0)
 			return (0);
 		if (n_commands == 1)
-			ret = launch_command(pipeline->content, shell_env->envp);
+			ret = launch_command(pipeline->content, shell_env);
 		else
-			ret = run_pipeline(pipeline, shell_env->envp, n_commands);
+			ret = run_pipeline(pipeline, shell_env, n_commands);
 		shell_env->question_mark = ret;  // update "?" special variable
 		lst = lst->next;
 	}

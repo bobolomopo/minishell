@@ -1,16 +1,8 @@
 #include "header.h"
 
-void	update_last_exit(char **envp, int exit_code)
-{
-	// TODO
-
-	(void)envp;
-	(void)exit_code;
-}
-
 // makes a pipe - fork - dup2 cycle
 // returns read_end of pipe or -1 if error
-int	send_to_pipe(t_command *comm, char **envp, int fd_in)
+int	send_to_pipe(t_command *comm, t_shell_env *shell_env, int fd_in)
 {
 	int	fd_pipe[2];
 	int	id;
@@ -30,7 +22,7 @@ int	send_to_pipe(t_command *comm, char **envp, int fd_in)
 		dup2(fd_pipe[1], 1);
 		close(fd_pipe[0]);
 		close(fd_pipe[1]);
-		launch_command(comm, envp);
+		launch_command(comm, shell_env);
 		exit(0);
 	}
 	if (fd_in != 0)
@@ -40,7 +32,7 @@ int	send_to_pipe(t_command *comm, char **envp, int fd_in)
 }
 
 // runs a list of n piped commands (2 or more)
-int	run_pipeline(t_list *lst, char **envp, int n)
+int	run_pipeline(t_list *lst, t_shell_env *shell_env, int n)
 {
 	int		pipe_left_read_end;
 	pid_t	id;
@@ -49,7 +41,7 @@ int	run_pipeline(t_list *lst, char **envp, int n)
 	pipe_left_read_end = 0;
 	while (lst->next)
 	{
-		pipe_left_read_end = send_to_pipe(lst->content, envp, pipe_left_read_end);
+		pipe_left_read_end = send_to_pipe(lst->content, shell_env, pipe_left_read_end);
 		if (pipe_left_read_end == -1)
 			return (-1);
 		lst = lst->next;
@@ -59,7 +51,7 @@ int	run_pipeline(t_list *lst, char **envp, int n)
 	{
 		dup2(pipe_left_read_end, 0);
 		close(pipe_left_read_end);
-		exit(launch_command(lst->content, envp));
+		exit(launch_command(lst->content, shell_env));
 	}
 	close(pipe_left_read_end);
 	waitpid(id, &status, 0);

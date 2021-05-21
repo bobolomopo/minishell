@@ -1,7 +1,33 @@
-read_line:
-
+ft_read_line:
 	deal with arrows left\right, ctrl-l
 
+builtins:
+	unset
+	export (see funtions in env)
+
+shell:
+
+	non-interactive shell case (use get_next_line)
+		istty function
+
+	signals: 
+		-->	should I implement any other signal handler other than SIGINT and SIGQUIT ?
+
+
+expander:
+	expansion and quote removal (?) must be done right before execution
+	of a simple command or pipeline.
+	because of this: return_42; echo $? (must display 42, and not the value
+	of $ before the command started)
+
+
+env:
+	set PWD when the shell starts???
+	the _ variable
+	OLDPWD ?
+	
+	
+NOTES:
 	ctrl-c, ctrl-d, ctrl-\
 	for some reason:
 		read() does not read anything when ctr-c is pressed. SIGINT is sent.
@@ -14,33 +40,3 @@ read_line:
 			and the return value will be 131 (128 + 3)
 		read() reads 4 when ctrl-d is pressed.
 
-
-
-executor:
-
-	get return value from builtins and execd commands
-		(struct containing char **shell_env and the special variables?)
-	write builts
-		start by the env ones
-
-shell:
-
-	non-interactive shell case (use get_next_line)
-		istty function
-
-	signals: 
-		handle SIGINT and SIGQUIT in the shell (do not ignore)
-		return values for execd process that were signaled (128 + signal)
-			waitpd and its macros (see test)
-		-->	should I implement any other signal handler other than SIGINT and SIGQUIT ?
-
-
-expander:
-	expansion and quote removal (?) must be done right before execution
-	of a simple command or pipeline.
-	because of this: return_42; echo $? (must display 42, and not the value
-	of $ before the command started)
-
-
-env:
-	update PWD when cd
