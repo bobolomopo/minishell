@@ -63,6 +63,7 @@ int		setup_env(char ***shell_env, char **envp);
 
 // signal handling
 void	signal_handler_c(int signal_code);
+void	sigquit_handler(int signal_code);
 
 // command-line
 int		init_termcaps(t_termcaps *termcaps);

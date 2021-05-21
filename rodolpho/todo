@@ -1,7 +1,17 @@
 read_line:
 
-	find out escape sequences for ctrl-c, ctrl-d and ctrl-\
-	make command-line repond to them accordingly
+	for some reason:
+		read() does not read anything when ctr-c is pressed. SIGINT is sent.
+			a non-builtcommand will be terminated by this signal, and the
+			return value will be 130 (128 + 2)
+		read() does not read anything when ctr-\ is pressed. SIGQUIT is sent.
+			this signal must be ignored by the shell, but a non-builtcommand
+			will be terminated by the signal. 
+			The shell with display "Quit: 3\n"
+			and the return value will be 131 (128 + 3)
+
+		read() reads 4 when ctrl-d is pressed.
+
 
 executor:
 

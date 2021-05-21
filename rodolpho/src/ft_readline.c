@@ -64,6 +64,7 @@ int	detect_key(void)
 	char	buffer[2];
 
 	read(0, buffer, 1);
+
 	if (buffer[0] == '\033') // detecting ARROWS UP/DOWN key presses
 	{
 		read(0, buffer, 2);
@@ -151,6 +152,14 @@ int	ft_readline(char **line, t_list **history, t_termcaps termcaps)
 		{
 			delete_last_char(cmdline.text_buffer, termcaps);
 			continue ;
+		}
+		if (key == 4) // ctrl-d
+		{
+			if (cmdline.text_buffer[0]) // if buffer not empty
+				continue ;
+			ft_putendl_fd("exit", 1);
+			ft_strlcpy(cmdline.text_buffer, "exit", 100);
+			break ;
 		}
 		if (key == ARROW_UP || key == ARROW_DOWN)
 		{

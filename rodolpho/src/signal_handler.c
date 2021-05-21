@@ -19,3 +19,9 @@ void	signal_handler_c(int signal_code)
 	}
 	(void)signal_code;
 }
+
+void	sigquit_handler(int signal_code)
+{
+	// doing nothing, for now
+	(void)signal_code;
+}
