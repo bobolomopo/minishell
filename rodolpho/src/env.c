@@ -51,12 +51,14 @@ void	increment_shlvl(char **env)
 	var[6]++;
 }
 
-// makes a copy of the environment and increments the SHLVL variable
-int	setup_env(char ***shell_env, char **envp)
+// makes a copy of the environment, increments the SHLVL variable and 
+// sets the "?" special variable to 0
+int	setup_env(t_shell_env *shell_env, char **envp)
 {
-	*shell_env = copy_env(envp);
-	if (!*shell_env)
+	shell_env->envp = copy_env(envp);
+	if (!shell_env->envp)
 		return (-1);
-	increment_shlvl(*shell_env);
+	increment_shlvl(shell_env->envp);
+	shell_env->question_mark = 0;
 	return (0);
 }

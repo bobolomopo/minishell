@@ -14,6 +14,13 @@
 #define ARROW_UP -1
 #define ARROW_DOWN -2
 
+typedef struct	s_shell_env
+{
+	char			**envp;
+	unsigned char	question_mark;
+}				t_shell_env;
+
+
 typedef	struct	s_cmdline
 {
 	char	text_buffer[100];
@@ -59,7 +66,7 @@ enum	redirection_ops
 void	*g_ptr;
 
 // environment
-int		setup_env(char ***shell_env, char **envp);
+int		setup_env(t_shell_env *shell_env, char **envp);
 
 // signal handling
 void	signal_handler_c(int signal_code);
@@ -75,7 +82,7 @@ void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position)
 int		parse_line(char *line, t_list **commands_lst);
 
 // execution
-int		execute_line(t_list *lst, char **envp);
+int		execute_line(t_list *lst, t_shell_env *shell_env);
 int		launch_command(t_command *command, char **envp);
 int		run_pipeline(t_list *lst, char **envp, int n);
 int		resolve_path(char *command, char **path);

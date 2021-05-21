@@ -26,10 +26,11 @@ void print_list_commands(t_list *list_of_pipelines)
 }
 
 // lst is a list of pipelines
-int	execute_line(t_list *lst, char **envp)
+int	execute_line(t_list *lst, t_shell_env *shell_env)
 {
 	t_list	*pipeline;
 	int		n_commands;
+	int		ret;
 
 	while (lst)
 	{
@@ -38,9 +39,10 @@ int	execute_line(t_list *lst, char **envp)
 		if (n_commands == 0)
 			return (0);
 		if (n_commands == 1)
-			launch_command(pipeline->content, envp);
+			ret = launch_command(pipeline->content, shell_env->envp);
 		else
-			run_pipeline(pipeline, envp, n_commands);
+			ret = run_pipeline(pipeline, shell_env->envp, n_commands);
+		shell_env->question_mark = ret;
 		lst = lst->next;
 	}
 	return (0);
