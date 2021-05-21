@@ -108,6 +108,8 @@ int	call_builtin(char **argv, char **envp)
 		return (builtin_env(argv, envp));	
 	if (ft_strcmp(argv[0], "echo") == 0)
 		return (builtin_echo(argv, envp));
+	if (ft_strcmp(argv[0], "pwd") == 0)
+		return (builtin_pwd(argv, envp));
 	
 	// TODO: other builtins
 

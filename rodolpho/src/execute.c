@@ -42,7 +42,7 @@ int	execute_line(t_list *lst, t_shell_env *shell_env)
 			ret = launch_command(pipeline->content, shell_env->envp);
 		else
 			ret = run_pipeline(pipeline, shell_env->envp, n_commands);
-		shell_env->question_mark = ret;
+		shell_env->question_mark = ret;  // update "?" special variable
 		lst = lst->next;
 	}
 	return (0);

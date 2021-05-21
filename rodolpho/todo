@@ -33,3 +33,14 @@ shell:
 		return values for execd process that were signaled (128 + signal)
 			waitpd and its macros (see test)
 		-->	should I implement any other signal handler other than SIGINT and SIGQUIT ?
+
+
+expander:
+	expansion and quote removal (?) must be done right before execution
+	of a simple command or pipeline.
+	because of this: return_42; echo $? (must display 42, and not the value
+	of $ before the command started)
+
+
+env:
+	update PWD when cd

@@ -4,10 +4,10 @@ int	builtin_env(char **argv, char **envp)
 {
 	int	i;
 
+	(void)argv;
 	i = 0;
 	while (envp[i]) 
 		ft_putendl_fd(envp[i++], 1);
-	(void)argv;
 	return (0);
 }
 
@@ -30,5 +30,23 @@ int	builtin_echo(char **argv, char **envp)
 	}
 	if (!n_flag)
 		ft_putchar_fd('\n', 1);
+	return (0);
+}
+
+// it does not rely on PWD env variable (like bash also does not)
+int	builtin_pwd(char **argv, char **envp)
+{
+	char	*pwd;
+
+	(void)argv;
+	(void)envp;
+	pwd = getcwd(NULL, 0);
+	if (!pwd)
+	{
+		ft_perror("pwd");
+		return (1);
+	}
+	ft_putendl_fd(pwd, 1);
+	free(pwd);
 	return (0);
 }

@@ -28,7 +28,7 @@ int	main(int argc, char **argv, char **envp)
 		parse_line(line, &commands_list); // lexer - parser- expander
 		execute_line(commands_list, &shell_env); // execute all pipelines
 		
-		printf("$?: %hhu\n", shell_env.question_mark); // testing
+		// printf("$?: %hhu\n", shell_env.question_mark); // testing
 
 		// clear commands list: TODO
 
