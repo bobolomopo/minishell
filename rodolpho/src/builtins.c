@@ -79,3 +79,55 @@ int	builtin_cd(char **argv, t_shell_env *shell_env)
 	free(pwd);
 	return (0);
 }
+
+int	is_valid_name(char *var)
+{
+	if (!(ft_isalpha(*var) || *var == '_'))
+		return (0);
+	var++;
+	while (*var && *var != '=')
+	{
+		if (!(ft_isalnum(*var) || *var == '_'))
+			return (0);
+		var++;
+	}
+	return (1);
+}
+
+
+int	error_msg_name(char *arg)
+{
+	ft_putstr_fd("Minishell: export: `", 2);
+	ft_putstr_fd(arg, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
+	return (1);
+}
+
+int	builtin_export(char **argv, t_shell_env *shell_env)
+{
+	int		i;
+	char	*var_name;
+	char	*var_value;
+	char	*ptr;
+
+	if (!argv[1])
+	{
+		ft_putendl_fd("TODO: weird list of vars", 1); // TODO
+		return (0);
+	}
+	i = 0;
+	while (argv[++i])
+	{
+		if (!is_valid_name(argv[i]))
+			return (error_msg_name(argv[i]));
+		if (!ft_strchr(argv[i], '=')) // for now, only name=value will take effect
+			continue ;
+		ptr = argv[i];
+		var_name = parse_var_name(&ptr); // TODO error handling
+		var_value = ptr + 1;
+		set_var(shell_env, var_name, var_value); // TODO error handling
+		free(var_name);
+	}
+	return (0);
+}
+

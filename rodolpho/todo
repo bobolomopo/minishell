@@ -3,7 +3,10 @@ ft_read_line:
 
 builtins:
 	unset
-	export (see funtions in env)
+	export (the no args case)
+
+execution:
+	use shell_env PATH
 
 shell:
 
@@ -20,12 +23,14 @@ expander:
 	because of this: return_42; echo $? (must display 42, and not the value
 	of $ before the command started)
 
+	parse_var_name: consider rewrite using is_valid_name, ft_strchr
 
 env:
 	set PWD when the shell starts???
 	the _ variable
 	OLDPWD ?
-	
+
+	should I handle local vars?	this would affect what env VAR does (without =)
 	
 NOTES:
 	ctrl-c, ctrl-d, ctrl-\

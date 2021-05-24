@@ -100,13 +100,19 @@ int	add_var(t_shell_env *shell_env,  char *new_var)
 {
 	char	**new_envp;
 	int		n;
+	int		i;
 
 	n = count_vars(shell_env->envp);
-	new_envp = ft_realloc(shell_env->envp, sizeof(*new_envp) * (n + 2));
+	new_envp = malloc(sizeof(*new_envp) * (n + 2));
 	if (!new_envp)
 		return (-1);
+	i = -1;
+	while (++i < n)
+		new_envp[i] = shell_env->envp[i];
 	new_envp[n] = new_var;
 	new_envp[n + 1] = NULL;
+	free(shell_env->envp);
+	shell_env->envp = new_envp;
 	return (0);
 }
 
@@ -116,7 +122,6 @@ void	update_var(char **envp, int index, char *new_var)
 	envp[index] = new_var;
 }
 
-// new_var: pointer to string VAR=VALUE
 int	set_var(t_shell_env *shell_env, char *var_name, char *value)
 {
 	char	*new_var;
@@ -124,7 +129,6 @@ int	set_var(t_shell_env *shell_env, char *var_name, char *value)
 	int		index;
 
 	size = ft_strlen(var_name) + ft_strlen(value) + 2; // why 2: '=' + '\0'
-
 	new_var = malloc(size); 
 	if (!new_var)
 		return (-1); // error
