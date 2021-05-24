@@ -8,7 +8,7 @@ void	*ft_realloc(void *ptr, size_t size)
 	new_mem = malloc(size);
 	if (!new_mem)
 		return (NULL);
-	ft_memcpy(new_mem, ptr, size);
+	ft_memcpy(new_mem, ptr, size); // THIS WILL SEGFAULT!! Gotta fix it...
 	free(ptr);
 	return (new_mem);
 }

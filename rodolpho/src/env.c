@@ -139,3 +139,17 @@ int	set_var(t_shell_env *shell_env, char *var_name, char *value)
 		update_var(shell_env->envp, index, new_var);
 	return (0);
 }
+
+// returns pointer to var's first char after "=", or NULL if var not found
+// no memory allocation
+char	*expand_var(char **envp,char *var)
+{
+	int		name_len;
+	char	*var_location;
+
+	var_location = find_var(envp, var);
+	if (!var_location)
+		return (NULL);
+	name_len = ft_strlen(var);
+	return (var_location + name_len + 1);
+}

@@ -14,6 +14,8 @@
 #define ARROW_UP -1
 #define ARROW_DOWN -2
 
+#define DOLLAR_SIGN -2
+
 typedef struct	s_shell_env
 {
 	char			**envp;
@@ -69,6 +71,7 @@ void	*g_ptr;
 int		setup_env(t_shell_env *shell_env, char **envp);
 char	*find_var(char **env, char *var);
 int		set_var(t_shell_env *shell_env, char *var_name, char *value);
+char	*expand_var(char **envp,char *var);
 
 // signal handling
 void	signal_handler_c(int signal_code);
@@ -82,6 +85,9 @@ void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position)
 
 // mini-parser (for tests)
 int		parse_line(char *line, t_list **commands_lst);
+
+// expasion
+int	make_var_expansions(t_command *command, t_shell_env *shell_env);
 
 // execution
 int		execute_line(t_list *lst, t_shell_env *shell_env);

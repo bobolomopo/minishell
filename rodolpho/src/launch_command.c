@@ -163,6 +163,10 @@ int	launch_command(t_command *command, t_shell_env *shell_env)
 	int	back_up_fds[3];
 	int	ret;
 
+	// make variable expansion
+	if (make_var_expansions(command, shell_env) == -1)
+		return (-1);
+
 	// backup stdin, stdout, stderr
 	if (backup_std_fds(back_up_fds) == -1)
 		return (-1);

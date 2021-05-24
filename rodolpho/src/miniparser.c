@@ -10,6 +10,25 @@
 // THIS IS A MINI-PARSER, JUST FOR SOME TESTS OF THE EXECUTOR 
 // It shall be replaced by the real parser.
 
+
+// replace all "$" ocurrences by DOLLAR_SIGN
+void	tag_dollar_sign(char **argv)
+{
+	char	*ptr;
+
+	while (*argv)
+	{
+		ptr = *argv;
+		while (*ptr)
+		{
+			if (*ptr == '$')
+				*ptr = DOLLAR_SIGN;
+			ptr++;
+		}
+		argv++;
+	}
+}
+
 // split a command string into its separate words and store it in a t_command struct
 t_command	*split_command(char *command)
 {
@@ -18,6 +37,7 @@ t_command	*split_command(char *command)
 	simple_command = malloc(sizeof(*simple_command));
 	simple_command->argv = ft_split(command, ' ');
 	simple_command->redirections = NULL;
+	tag_dollar_sign(simple_command->argv);
 	return (simple_command);
 }
 
