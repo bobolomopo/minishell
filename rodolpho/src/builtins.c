@@ -94,8 +94,7 @@ int	is_valid_name(char *var)
 	return (1);
 }
 
-
-int	error_msg_name(char *arg)
+static int	error_msg_name(char *arg)
 {
 	ft_putstr_fd("Minishell: export: `", 2);
 	ft_putstr_fd(arg, 2);
@@ -130,4 +129,3 @@ int	builtin_export(char **argv, t_shell_env *shell_env)
 	}
 	return (0);
 }
-

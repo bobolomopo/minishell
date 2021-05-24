@@ -1,7 +1,8 @@
 ft_read_line:
-	deal with arrows left\right, ctrl-l
+	deal with arrows left\right, ctrl-L
 
 builtins:
+	exit
 	unset
 	export (the no args case)
 
@@ -16,21 +17,16 @@ shell:
 	signals: 
 		-->	should I implement any other signal handler other than SIGINT and SIGQUIT ?
 
-
 expander:
-	expansion and quote removal (?) must be done right before execution
-	of a simple command or pipeline.
-	because of this: return_42; echo $? (must display 42, and not the value
-	of $ before the command started)
 
-	parse_var_name: consider rewrite using is_valid_name, ft_strchr
+	parse_var_name: consider rewriting using is_valid_name, ft_strchr
 
 env:
 	set PWD when the shell starts???
 	the _ variable
 	OLDPWD ?
 
-	should I handle local vars?	this would affect what env VAR does (without =)
+	should I handle local vars?	this would affect what export VAR does (without =)
 	
 NOTES:
 	ctrl-c, ctrl-d, ctrl-\
@@ -45,3 +41,9 @@ NOTES:
 			and the return value will be 131 (128 + 3)
 		read() reads 4 when ctrl-d is pressed.
 
+
+	expansion must be done right before execution
+	of a simple command or pipeline.
+	because of this: return_42; echo $? (must display 42, and not the value
+	of $ before the command started)
+	
