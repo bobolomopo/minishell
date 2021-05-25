@@ -84,7 +84,7 @@ int	process_redirections_list(t_list *lst)
 	return (0);
 }
 
-// retuns 1 if the command is a builtin, 0 otherwise
+// retuns index (0 to 6) if the command is a builtin, -1 otherwise
 int	is_builtin(char *command_name)
 {
 	static char*	builtin[7] = {"echo", "cd", "pwd", "export", "unset",
@@ -95,33 +95,20 @@ int	is_builtin(char *command_name)
 	while (i < 7)
 	{
 		if (ft_strcmp(command_name, builtin[i]) == 0)
-			return (1);
+			return (i);
 		i++;
 	}
-	return (0);
+	return (-1);
 }
 
-int	call_builtin(char **argv, t_shell_env *shell_env)
+// jump table to call builtin command (array of pointers to functions)
+// indexes must match those in is_builtin()
+int	call_builtin(int builtin_index, char **argv, t_shell_env *shell_env)
 {
-	// TODO: jump table (pointers to functions)
-	if (ft_strcmp(argv[0], "env") == 0)
-		return (builtin_env(argv, shell_env));	
-	if (ft_strcmp(argv[0], "echo") == 0)
-		return (builtin_echo(argv, shell_env));
-	if (ft_strcmp(argv[0], "pwd") == 0)
-		return (builtin_pwd(argv, shell_env));
-	if (ft_strcmp(argv[0], "cd") == 0)
-		return (builtin_cd(argv, shell_env));
-	if (ft_strcmp(argv[0], "export") == 0)
-		return (builtin_export(argv, shell_env));
-	if (ft_strcmp(argv[0], "exit") == 0)
-		return (builtin_exit(argv, shell_env));
-	if (ft_strcmp(argv[0], "unset") == 0)
-		return (builtin_unset(argv, shell_env));
+	static int (*f[7])(char **, t_shell_env *) = {builtin_echo, builtin_cd,
+	builtin_pwd, builtin_export, builtin_unset, builtin_env, builtin_exit};
 	
-	// TODO: other builtins
-
-	return (0);
+	return (f[builtin_index](argv, shell_env));
 }
 
 // seach for the command in the PATH directories, forks and execs into the program
@@ -168,6 +155,7 @@ int	launch_command(t_command *command, t_shell_env *shell_env)
 {
 	int	back_up_fds[3];
 	int	ret;
+	int	builtin_index;
 
 	// make variable expansion
 	if (make_var_expansions(command, shell_env) == -1)
@@ -184,8 +172,9 @@ int	launch_command(t_command *command, t_shell_env *shell_env)
 		return (-1);
 	}
 
-	if (is_builtin(command->argv[0]))
-		ret = call_builtin(command->argv, shell_env);
+	builtin_index = is_builtin(command->argv[0]);
+	if (builtin_index != -1)
+		ret = call_builtin(builtin_index, command->argv, shell_env);
 	else
 		ret = exec_binary(command->argv, shell_env->envp);
 			
