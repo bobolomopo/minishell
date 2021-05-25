@@ -1,12 +1,16 @@
 ft_read_line:
-	deal with arrows left\right, ctrl-L
+	auto-growing mallocd buffer for text input
+	break it down to smaller functions
+	write double-linked list funcions for libft and use them for history navigation
 
 builtins:
 	exit
 	unset
 	export (the no args case)
 
-execution:
+	jump_table in call_builtin
+
+resolve_path:
 	use shell_env PATH
 
 shell:

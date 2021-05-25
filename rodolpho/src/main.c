@@ -22,19 +22,22 @@ int	main(int argc, char **argv, char **envp)
 		if (!line)
 			continue ;
 
-		if (ft_strcmp(line, "exit") == 0) // for testing
-			break;
+		// if (ft_strcmp(line, "exit") == 0) // for testing
+		// 	break;
 		
 		parse_line(line, &commands_list); // lexer - parser- expander
+
+		shell_env.mem2clear->commands_list = commands_list;
+		shell_env.mem2clear->history = history;
+
 		execute_line(commands_list, &shell_env); // execute all pipelines
 		
-		// printf("$?: %hhu\n", shell_env.question_mark); // testing
 
 		// clear commands list: TODO
 
 	}
-	ft_lstclear(&history, free);
-	ft_free_split(shell_env.envp);
+	// ft_lstclear(&history, free);
+	// ft_free_split(shell_env.envp);
 
 	(void)argc;
 	(void)argv;

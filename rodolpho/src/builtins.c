@@ -80,7 +80,7 @@ int	builtin_cd(char **argv, t_shell_env *shell_env)
 	return (0);
 }
 
-int	is_valid_name(char *var)
+static int	is_valid_name(char *var)
 {
 	if (!(ft_isalpha(*var) || *var == '_'))
 		return (0);

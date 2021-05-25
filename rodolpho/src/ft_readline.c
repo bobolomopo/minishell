@@ -75,6 +75,7 @@ int	detect_key(void)
 			else if (buffer[1] == 'B')
 				return (ARROW_DOWN);
 		}
+		return (0);
 	}
 
 	// int key = buffer[0];
@@ -171,10 +172,16 @@ int	ft_readline(char **line, t_list **history, t_termcaps termcaps)
 		}
 		else
 		{
-			write(1, &key, 1); // echo to screen
-			if (key == '\n') // return key
+			if (ft_isprint(key))
+			{
+				write(1, &key, 1); // echo to screen
+				add_to_buffer(key, cmdline.text_buffer);
+			}
+			else if (key == '\n') // return key
+			{
+				write(1, &key, 1);
 				break ;	
-			add_to_buffer(key, cmdline.text_buffer);
+			}
 		}
 	}
 	*line = ft_strdup(cmdline.text_buffer);

@@ -114,6 +114,8 @@ int	call_builtin(char **argv, t_shell_env *shell_env)
 		return (builtin_cd(argv, shell_env));
 	if (ft_strcmp(argv[0], "export") == 0)
 		return (builtin_export(argv, shell_env));
+	if (ft_strcmp(argv[0], "exit") == 0)
+		return (builtin_exit(argv, shell_env));
 	
 	// TODO: other builtins
 

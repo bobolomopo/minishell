@@ -16,12 +16,18 @@
 
 #define DOLLAR_SIGN -2
 
+typedef struct	s_mem2clear
+{
+	t_list	*commands_list;
+	t_list	*history;
+}				t_mem2clear;
+
 typedef struct	s_shell_env
 {
 	char			**envp;
 	unsigned char	question_mark;
+	t_mem2clear		*mem2clear;
 }				t_shell_env;
-
 
 typedef	struct	s_cmdline
 {
@@ -103,5 +109,8 @@ int		builtin_echo(char **argv, t_shell_env *shell_env);
 int		builtin_pwd(char **argv, t_shell_env *shell_env);
 int		builtin_cd(char **argv, t_shell_env *shell_env);
 int		builtin_export(char **argv, t_shell_env *shell_env);
+int		builtin_exit(char **argv, t_shell_env *shell_env);
 
+// clear memory
+void	clear_memory(t_shell_env *shell_env);
 #endif
