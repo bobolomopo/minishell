@@ -1,6 +1,5 @@
 #include "header.h"
 
-
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
@@ -21,24 +20,15 @@ int	main(int argc, char **argv, char **envp)
 		ft_readline(&line, &history, termcaps); // display prompt and readline
 		if (!line)
 			continue ;
-
-		// if (ft_strcmp(line, "exit") == 0) // for testing
-		// 	break;
 		
-		parse_line(line, &commands_list); // lexer - parser- expander
+		parse_line(line, &commands_list); // lexer - parser
 
 		shell_env.mem2clear->commands_list = commands_list;
 		shell_env.mem2clear->history = history;
 
 		execute_line(commands_list, &shell_env); // execute all pipelines
-		
-
-		// clear commands list: TODO
-
+		clear_commands_list(&commands_list);
 	}
-	// ft_lstclear(&history, free);
-	// ft_free_split(shell_env.envp);
-
 	(void)argc;
 	(void)argv;
 }

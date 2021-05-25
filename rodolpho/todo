@@ -4,16 +4,12 @@ ft_read_line:
 	write double-linked list funcions for libft and use them for history navigation
 
 builtins:
-	unset
 	export (the no args case)
-
-	jump_table in call_builtin
 
 resolve_path:
 	use shell_env PATH
 
 shell:
-
 	non-interactive shell case (use get_next_line)
 		istty function
 
@@ -21,16 +17,18 @@ shell:
 		-->	should I implement any other signal handler other than SIGINT and SIGQUIT ?
 
 expander:
-
 	parse_var_name: consider rewriting using is_valid_name, ft_strchr
 
 env:
 	set PWD when the shell starts???
-	the _ variable
-	OLDPWD ?
+	the _ variable ??
 
 	should I handle local vars?	this would affect what export VAR does (without =)
 	
+
+error handling: (ideas)
+	function int free_ret(void *ptr, int ret) : frees ptr and returns ret (0 can be used for returning NULL pointer)
+
 NOTES:
 	ctrl-c, ctrl-d, ctrl-\
 	for some reason:

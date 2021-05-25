@@ -6,7 +6,7 @@ OBJ = $(SRC:.c=.o)
 LIBFT = ../libft/libft.a
 INCLUDE = -I. -I../libft
 CC = gcc
-FLAGS = -Wall -Wextra -Werror 
+FLAGS = -Wall -Wextra -Werror  -g # debug
 
 all:		minishell
 

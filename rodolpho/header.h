@@ -115,5 +115,6 @@ int		builtin_unset(char **argv, t_shell_env *shell_env);
 
 // clear memory
 void	clear_memory(t_shell_env *shell_env);
+void	clear_commands_list(t_list **commands_list);
 
 #endif

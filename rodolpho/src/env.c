@@ -54,6 +54,7 @@ void	increment_shlvl(char **env)
 	var[6]++;
 }
 
+
 // makes a copy of the environment, increments the SHLVL variable and 
 // sets the "?" special variable to 0
 int	setup_env(t_shell_env *shell_env, char **envp)
@@ -62,6 +63,7 @@ int	setup_env(t_shell_env *shell_env, char **envp)
 	if (!shell_env->envp)
 		return (-1);
 	increment_shlvl(shell_env->envp);
+	remove_var("OLDPWD", shell_env);
 	shell_env->question_mark = 0;
 	return (0);
 }
@@ -122,6 +124,8 @@ void	update_var(char **envp, int index, char *new_var)
 	envp[index] = new_var;
 }
 
+// adds var_name (if non-existant) or updates var_name's value in the environment.
+// returns 0 upon success, -1 if error (TODO...)
 int	set_var(t_shell_env *shell_env, char *var_name, char *value)
 {
 	char	*new_var;

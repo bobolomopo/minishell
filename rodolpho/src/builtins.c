@@ -57,6 +57,7 @@ int	builtin_cd(char **argv, t_shell_env *shell_env)
 {
 	char	*path;
 	char	*pwd;
+	char	*old_pwd;
 
 	path = argv[1];
 	if (!path)
@@ -68,14 +69,20 @@ int	builtin_cd(char **argv, t_shell_env *shell_env)
 			return (1);
 		}
 	}
+	old_pwd = getcwd(NULL, 0);
+	if (!old_pwd)
+		ft_perror("cd"); // non-fatal error
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("minishell: cd: ", 2);
 		ft_perror(path);
 		return (1);
 	}
-	pwd = getcwd(NULL, 0); // TODO error handling
-	set_var(shell_env, "PWD", pwd);
+	if (old_pwd)
+		set_var(shell_env, "OLDPWD", old_pwd); // todo: error handling
+	free(old_pwd);
+	pwd = getcwd(NULL, 0);
+	set_var(shell_env, "PWD", pwd); // error handling :(
 	free(pwd);
 	return (0);
 }
