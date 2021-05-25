@@ -78,6 +78,7 @@ int		setup_env(t_shell_env *shell_env, char **envp);
 char	*find_var(char **env, char *var);
 int		set_var(t_shell_env *shell_env, char *var_name, char *value);
 char	*expand_var(char **envp,char *var);
+void	remove_var(char *var_name, t_shell_env *shell_env);
 
 // signal handling
 void	signal_handler_c(int signal_code);
@@ -110,7 +111,9 @@ int		builtin_pwd(char **argv, t_shell_env *shell_env);
 int		builtin_cd(char **argv, t_shell_env *shell_env);
 int		builtin_export(char **argv, t_shell_env *shell_env);
 int		builtin_exit(char **argv, t_shell_env *shell_env);
+int		builtin_unset(char **argv, t_shell_env *shell_env);
 
 // clear memory
 void	clear_memory(t_shell_env *shell_env);
+
 #endif

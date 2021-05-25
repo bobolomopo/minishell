@@ -157,3 +157,22 @@ char	*expand_var(char **envp,char *var)
 	name_len = ft_strlen(var);
 	return (var_location + name_len + 1);
 }
+
+// if var_name exists in envp, the string is freed and all contents to its right
+// are shift 1 position to the left (so, no reallocation)
+void	remove_var(char *var_name, t_shell_env *shell_env)
+{
+	int		i;
+	char	**envp;
+
+	envp = shell_env->envp;
+	i = find_var_index(envp, var_name);
+	if (i == -1)
+		return ;
+	free(envp[i]);
+	while (envp[i])	
+	{
+		envp[i] = envp[i + 1];
+		i++;
+	}
+}

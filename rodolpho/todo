@@ -4,7 +4,6 @@ ft_read_line:
 	write double-linked list funcions for libft and use them for history navigation
 
 builtins:
-	exit
 	unset
 	export (the no args case)
 
