@@ -14,10 +14,17 @@
 # include <curses.h>
 # include <term.h>
 
-# define ARROW_UP -1
-# define ARROW_DOWN -2
+# define ARROW_UP -2
+# define ARROW_DOWN -3
+
+# define BACKSPACE 127
+# define CTRL_D 4
+# define ENTER_KEY 10
 
 # define DOLLAR_SIGN -2
+
+# define PROMPT "super_prompt $ "
+# define BUFFER_STEP 100
 
 typedef struct	s_mem2clear
 {
@@ -34,11 +41,11 @@ typedef struct	s_shell_env
 
 typedef	struct	s_cmdline
 {
-	char	text_buffer[100];
+	char	*buffer;
+	int		size;
+	int		index;
 	char	*backup_buffer;
-	char	prompt[20];
 	t_list	*position;
-	int		readline_mode;
 
 }				t_cmdline;
 
@@ -92,9 +99,14 @@ void	setup_signal_handlers(void);
 
 int		init_termcaps(t_termcaps *termcaps);
 int		setup_terminal(struct termios *termios_p_backup);
-int		ft_readline(char **line, t_list **history, t_termcaps termcaps);
-void	arrow_up(char *buffer, char **backup, t_list *history, t_list **position);
-void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position);
+int		ft_readline(char **line, t_list *history, t_termcaps termcaps);
+int		arrow_up(t_cmdline *cmdline, t_list *history, t_termcaps termcaps);
+int		arrow_down(t_cmdline *cmdline, t_list *history, t_termcaps termcaps);
+
+int		initialize_cmdline(t_cmdline *cmdline, t_list *history);
+int		add_char(int key, t_cmdline *cmdline);
+int		delete_last_char(t_cmdline *cmdline, t_termcaps termcaps);
+void	refresh_display(t_cmdline *cmdline, t_termcaps termcaps);
 
 // mini-parser (for tests)
 int		parse_line(char *line, t_list **commands_lst);
@@ -108,7 +120,6 @@ int		execute_line(t_list *lst, t_shell_env *shell_env);
 int		launch_command(t_command *command, t_shell_env *shell_env);
 int		run_pipeline(t_list *lst, t_shell_env *shell_env, int n);
 int		resolve_path(char *command, char **path);
-void	ft_perror(char *func_name);
 
 // builtins
 int		builtin_env(char **argv, t_shell_env *shell_env);
@@ -122,5 +133,9 @@ int		builtin_unset(char **argv, t_shell_env *shell_env);
 // clear memory
 void	clear_memory(t_shell_env *shell_env);
 void	clear_commands_list(t_list **commands_list);
+
+// errors
+void	ft_perror(char *func_name);
+int		ft_perror_ret(char *func_name, int return_value);
 
 #endif

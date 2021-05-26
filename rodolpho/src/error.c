@@ -12,3 +12,9 @@ void ft_perror(char *func_name)
 	}
 	ft_putendl_fd(strerror(error_code), 2);
 }
+
+int	ft_perror_ret(char *func_name, int return_value)
+{
+	ft_perror(func_name);
+	return (return_value);
+}

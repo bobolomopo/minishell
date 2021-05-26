@@ -1,146 +1,103 @@
 #include "header.h"
 
-// this prototype is a requirement for tputs 
-int ft_putchar_stdout(int c)
-{
-	return (write(1, &c, 1));
-}
-
+/*
+Reads a key press from the terminal.
+Escape sequences:
+Arrow up: '\033' '[' 'A'
+Arrow down: '\033' '[' 'B'
+*/
 int	detect_key(void)
 {
 	char	buffer[2];
+	int		ret;
 
-	read(0, buffer, 1);
-
-	if (buffer[0] == '\033') // detecting ARROWS UP/DOWN key presses
+	ret = read(0, buffer, 1);
+	if (ret == -1)
+		return (ft_perror_ret("read", -1));
+	if (buffer[0] == '\033')
 	{
-		read(0, buffer, 2);
+		ret = read(0, buffer, 2);
+		if (ret == -1)
+			return (ft_perror_ret("read", -1));
 		if (buffer[0] == '[')
 		{
 			if (buffer[1] == 'A')
 				return (ARROW_UP);
-			else if (buffer[1] == 'B')
+			if (buffer[1] == 'B')
 				return (ARROW_DOWN);
 		}
 		return (0);
 	}
-
-	// int key = buffer[0];
-	// printf("key value: %d\n", key);
-	
-	return (buffer[0]); // check if printable character?
+	return (buffer[0]);
 }
 
-void	add_to_buffer(int key, char *text_buffer)
+int	enter_key(t_cmdline *cmdline)
 {
-	while (*text_buffer)
-		text_buffer++;
-	*text_buffer = (char)key;
-	text_buffer++;
-	*text_buffer = '\0';
-}
-
-void	refresh_display(char *prompt, char *text_buffer, t_termcaps termcaps)
-{
-	// fucking termcaps bug
-	char *mv_cursor_1st_col = "\r";
-
-	tputs(mv_cursor_1st_col, 1, ft_putchar_stdout);			// linux version
-	// tputs(termcaps.mv_cursor_col1, 1, ft_putchar_stdout); // mac version
-	tputs(termcaps.cl_line, 1, ft_putchar_stdout);
-	write(1, prompt, ft_strlen(prompt));
-	write(1, text_buffer, ft_strlen(text_buffer));
-}
-
-void	delete_last_char(char *text_buffer, t_termcaps termcaps)
-{
-	if (*text_buffer == '\0') // if empty buffer
-		return ;
-	// tputs(termcaps.mv_cursor_left, 1, ft_putchar_stdout); // move cursor left - MacOS version
-	tputs("\b", 1, ft_putchar_stdout); // move cursor left - LINUX version
-	tputs(termcaps.cl_to_endline, 1, ft_putchar_stdout); // clear to end of line
-	// delete also from buffer
-	while (*text_buffer)
-		text_buffer++;
-	text_buffer--;
-	*text_buffer = '\0';
-
-}
-
-int	add_to_history(char *line, t_list **history)
-{
-	t_list	*elem;
-
-	elem = ft_lstnew(line);
-	if (!elem)
-		return (-1);
-	ft_lstadd_front(history, elem);
+	write(1, "\n", 1);
+	cmdline->buffer[cmdline->index] = '\0';
 	return (0);
 }
 
-void	initialize_cmdline(t_cmdline *cmdline)
+int	ctrl_d(t_cmdline *cmdline)
 {
-	cmdline->text_buffer[0] = '\0';
-	cmdline->backup_buffer = NULL;
-	ft_strlcpy(cmdline->prompt, "prompt > ", 20); 
-	cmdline->position = NULL;
+	ft_putendl_fd("exit", 1);
+	ft_strlcpy(cmdline->buffer, "exit", cmdline->size);
+	return (0);
 }
 
-int	ft_readline(char **line, t_list **history, t_termcaps termcaps)
+// return 1 if key read successfully and input is not over
+// 0 if finished (enter key or ctrl-d)
+// -1 if error
+int	read_key_and_process(t_cmdline *cmdline, t_list *history, t_termcaps tc)
+{
+	int	key;
+
+	key = detect_key();
+	if (key == -1)
+		return (-1);
+	if (ft_isprint(key))
+		return (add_char(key, cmdline));
+	if (key == BACKSPACE)
+		return (delete_last_char(cmdline, tc));
+	if (key == ENTER_KEY)
+		return (enter_key(cmdline));
+	if (key == CTRL_D && cmdline->index == 0)
+		return (ctrl_d(cmdline));
+	if (key == ARROW_DOWN)
+		return (arrow_down(cmdline, history, tc));
+	if (key == ARROW_UP)
+		return (arrow_up(cmdline, history, tc));
+	return (1);
+}
+
+/*
+Reads input from the terminal, allowing navigation in history.
+Upon success, line is a freeable string and 0 is returned.
+Upon error, -1 is returned and line is NULL.
+Terminal is put in non-canonical mode and echo is disabled, to allow
+read() to get each key stroke. Terminal settings are recovered before
+exiting.
+*/
+int	ft_readline(char **line, t_list *history, t_termcaps termcaps)
 {
 	struct termios	termios_p_backup;
-	int				key;
 	t_cmdline		cmdline;
+	int				ret;
 
+	*line = NULL;
 	if (setup_terminal(&termios_p_backup) == -1)
 		return (-1);
-	initialize_cmdline(&cmdline);
-	g_ptr = &cmdline; // the signalhandler has access to cmdline via the global variable
-
-	write(1, cmdline.prompt, ft_strlen(cmdline.prompt));
-	while (1)
-	{
-		key = detect_key();
-		if (key == 127) // backspace key
-		{
-			delete_last_char(cmdline.text_buffer, termcaps);
-			continue ;
-		}
-		if (key == 4) // ctrl-d
-		{
-			if (cmdline.text_buffer[0]) // if buffer not empty
-				continue ;
-			ft_putendl_fd("exit", 1);
-			ft_strlcpy(cmdline.text_buffer, "exit", 100);
-			break ;
-		}
-		if (key == ARROW_UP || key == ARROW_DOWN)
-		{
-			if (key == ARROW_UP)
-				arrow_up(cmdline.text_buffer, &cmdline.backup_buffer, *history, &cmdline.position);
-			else
-				arrow_down(cmdline.text_buffer, &cmdline.backup_buffer, *history, &cmdline.position);
-			refresh_display(cmdline.prompt, cmdline.text_buffer, termcaps);
-		}
-		else
-		{
-			if (key == '\n') // return key
-			{
-				write(1, "\n", 1); // break line and exit loop
-				break ;	
-			}
-			if (ft_isprint(key))
-			{
-				write(1, &key, 1); // echo to screen
-				add_to_buffer(key, cmdline.text_buffer);
-			}
-		}
-	}
-	*line = ft_strdup(cmdline.text_buffer);
-	add_to_history(*line, history);
-	
-	tcsetattr(0, 0, &termios_p_backup); // recover terminal settings
-
+	if (initialize_cmdline(&cmdline, history) == -1)
+		return (-1);
+	ret = 1;
+	while (ret == 1)
+		ret = read_key_and_process(&cmdline, history, termcaps);
+	if (ret == -1)
+		free(cmdline.buffer);
+	else
+		*line = cmdline.buffer;
+	free(cmdline.backup_buffer);
 	g_ptr = NULL;
-	return (0);
+	tcsetattr(0, 0, &termios_p_backup);
+	return (ret);
 }

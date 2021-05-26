@@ -16,48 +16,70 @@ t_list	*ft_lst_prev_item(t_list *lst, t_list *elem)
 	return (NULL);
 }
 
-int	backup_buffer(char *buffer, char **backup)
+int	backup_buffer(t_cmdline *cmdline)
 {
-	*backup = ft_strdup(buffer);
-	if (!*backup)
+	cmdline->buffer[cmdline->index] = '\0';
+	cmdline->backup_buffer = ft_strdup(cmdline->buffer);
+	if (!cmdline->backup_buffer)
+	{
+		ft_perror("backup_buffer");
 		return (-1);
+	}
 	return (0);
 }
 
-void	restore_buffer(char *buffer, char **backup_buffer)
+void	restore_buffer(t_cmdline *cmdline)
 {
-	ft_strlcpy(buffer, *backup_buffer, 100);
-	free(*backup_buffer);
-	*backup_buffer = NULL;
+	ft_strlcpy(cmdline->buffer, cmdline->backup_buffer, cmdline->size);
+	cmdline->index = ft_strlen(cmdline->buffer);
+	free(cmdline->backup_buffer);
+	cmdline->backup_buffer = NULL;
 }
 
-void	arrow_up(char *buffer, char **backup, t_list *history, t_list **position)
+/*
+cmdline->position: which item of the history if being displayed in the
+commandline (pointer to list).
+NULL: none, new command being typed
+*/
+
+/*
+returns -1 if error, 1 otherwise (caller expects that)
+*/
+int	arrow_up(t_cmdline *cmdline, t_list *history, t_termcaps termcaps)
 {
-	if (*position == NULL) // current command, not in history
+	if (history == NULL)
+		return (1);
+	if (cmdline->position && cmdline->position->next == NULL)
+		return (1);
+	if (cmdline->position == NULL) // current command, not in history
 	{
-		backup_buffer(buffer, backup); //TODO: handle error
-		if (history)
-			(*position) = history;
-		else		// if history is empty, last line cannot be run...
-			return ;
+		if (backup_buffer(cmdline) == -1)
+			return (-1);
+		cmdline->position = history;
 	}
-	else if ((*position)->next == NULL) // last item in history
-		return ;
 	else
-		(*position) = (*position)->next;
-	ft_strlcpy(buffer, (*position)->content, 100);
+		cmdline->position = cmdline->position->next;
+	ft_strlcpy(cmdline->buffer, cmdline->position->content, cmdline->size);
+	cmdline->index = ft_strlen(cmdline->buffer);
+	refresh_display(cmdline, termcaps);
+	return (1);
 }
 
-void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position)
+// always returns 1 (caller expects that)
+int	arrow_down(t_cmdline *cmdline, t_list *history, t_termcaps termcaps)
 {
-	if (*position == NULL)
-		return ;
-	if (*position == history) // first item in history
+	if (cmdline->position == NULL)
+		return (1);
+	if (cmdline->position == history) // first item in history
 	{
-		restore_buffer(buffer, backup);
-		*position = NULL;
-		return ;
+		restore_buffer(cmdline);
+		refresh_display(cmdline, termcaps);
+		cmdline->position = NULL;
+		return (1);
 	}
-	*position = ft_lst_prev_item(history, *position); // TODO
-	ft_strlcpy(buffer, (*position)->content, 100);
+	cmdline->position = ft_lst_prev_item(history, cmdline->position);
+	ft_strlcpy(cmdline->buffer, cmdline->position->content, cmdline->size);
+	cmdline->index = ft_strlen(cmdline->buffer);
+	refresh_display(cmdline, termcaps);
+	return (1);
 }

@@ -13,8 +13,8 @@ void	signal_handler_c(int signal_code)
 	if (g_ptr)
 	{
 		cmdl = (t_cmdline *)g_ptr;
-		cmdl->text_buffer[0] = '\0';
-		write(1, cmdl->prompt, ft_strlen(cmdl->prompt));
+		cmdl->index = 0;
+		write(1, PROMPT, ft_strlen(PROMPT));
 		cmdl->position = NULL;
 		free(cmdl->backup_buffer);
 		cmdl->backup_buffer = NULL;
