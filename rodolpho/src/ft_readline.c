@@ -95,7 +95,11 @@ void	add_to_buffer(int key, char *text_buffer)
 
 void	refresh_display(char *prompt, char *text_buffer, t_termcaps termcaps)
 {
-	tputs(termcaps.mv_cursor_col1, 1, ft_putchar_stdout);
+	// fucking termcaps bug
+	char *mv_cursor_1st_col = "\r";
+
+	tputs(mv_cursor_1st_col, 1, ft_putchar_stdout);			// linux version
+	// tputs(termcaps.mv_cursor_col1, 1, ft_putchar_stdout); // mac version
 	tputs(termcaps.cl_line, 1, ft_putchar_stdout);
 	write(1, prompt, ft_strlen(prompt));
 	write(1, text_buffer, ft_strlen(text_buffer));
@@ -105,7 +109,8 @@ void	delete_last_char(char *text_buffer, t_termcaps termcaps)
 {
 	if (*text_buffer == '\0') // if empty buffer
 		return ;
-	tputs(termcaps.mv_cursor_left, 1, ft_putchar_stdout); // move cursor left
+	// tputs(termcaps.mv_cursor_left, 1, ft_putchar_stdout); // move cursor left - MacOS version
+	tputs("\b", 1, ft_putchar_stdout); // move cursor left - LINUX version
 	tputs(termcaps.cl_to_endline, 1, ft_putchar_stdout); // clear to end of line
 	// delete also from buffer
 	while (*text_buffer)
@@ -172,16 +177,13 @@ int	ft_readline(char **line, t_list **history, t_termcaps termcaps)
 		}
 		else
 		{
-			if (ft_isprint(key))
+			if (key == '\n') // return key
 			{
-				write(1, &key, 1); // echo to screen
-				add_to_buffer(key, cmdline.text_buffer);
-			}
-			else if (key == '\n') // return key
-			{
-				write(1, &key, 1);
+				write(1, "\n", 1); // break line and exit loop
 				break ;	
 			}
+			write(1, &key, 1); // echo to screen
+			add_to_buffer(key, cmdline.text_buffer);
 		}
 	}
 	*line = ft_strdup(cmdline.text_buffer);
