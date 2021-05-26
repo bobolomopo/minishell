@@ -20,6 +20,7 @@ expander:
 	parse_var_name: consider rewriting using is_valid_name, ft_strchr
 
 env:
+	SHLVL bigger than 9
 	set PWD when the shell starts???
 	the _ variable ??
 
@@ -29,6 +30,9 @@ env:
 
 error handling: (ideas)
 	function int free_ret(void *ptr, int ret) : frees ptr and returns ret (0 can be used for returning NULL pointer)
+
+libft: 
+	protect ft_free_split
 
 NOTES:
 	ctrl-c, ctrl-d, ctrl-\

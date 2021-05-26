@@ -1,29 +1,37 @@
 #include "header.h"
 
-char **copy_env(char **envp)
+char	**env_copy_error(char **envp)
+{
+	ft_perror("copy_env");
+	if (envp)
+		ft_free_split(envp);
+	return (NULL);
+}
+
+char	**copy_env(char **envp)
 {
 	int	i;
 	int	n;
-	char **shell_env;
+	char **shell_envp;
 	int	len;
 
 	n = 0;
 	while (envp[n])
 		n++;
-	shell_env = malloc(sizeof(*shell_env) * (n + 1));
-	if (!shell_env)
-		return (NULL);
+	shell_envp = malloc(sizeof(*shell_envp) * (n + 1));
+	if (!shell_envp)
+		return (env_copy_error(shell_envp));
 	i = -1;
 	while (++i < n)
 	{
 		len = ft_strlen(envp[i]);
-		shell_env[i] = malloc(sizeof(char) * (len + 1));
-		if (!shell_env[i])
-			return (ft_free_split(shell_env));
-		ft_strlcpy(shell_env[i], envp[i], len + 1);
+		shell_envp[i] = malloc(sizeof(char) * (len + 1));
+		if (!shell_envp[i])
+			return (env_copy_error(shell_envp));
+		ft_strlcpy(shell_envp[i], envp[i], len + 1);
 	}
-	shell_env[n] = NULL;
-	return (shell_env);
+	shell_envp[n] = NULL;
+	return (shell_envp);
 }
 
 // works for levels up to 9
@@ -48,7 +56,10 @@ int	setup_env(t_shell_env *shell_env, char **envp)
 {
 	shell_env->envp = copy_env(envp);
 	if (!shell_env->envp)
+	{
+
 		return (-1);
+	}
 	increment_shlvl(shell_env->envp);
 	remove_var("OLDPWD", shell_env);
 	shell_env->question_mark = 0;

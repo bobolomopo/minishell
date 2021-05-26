@@ -9,13 +9,14 @@ static int	error(char *msg, int value)
 /*
 Establishes a connection with the terminfo database and gets the termcaps
 needed for ft_readline
+Returns -1 if error.
 */
 int	init_termcaps(t_termcaps *termcaps)
 {
 	char	*term_type;
 	int		ret;
 
-	term_type = getenv("TERM");
+	term_type = getenv("TERM"); // not sure if I should use our env or the inherited one
 	if (term_type == NULL)
 		return (error("TERM environmental variable must be set\n", -1));
 	ret = tgetent(NULL, term_type);
@@ -30,7 +31,7 @@ int	init_termcaps(t_termcaps *termcaps)
 	// termcaps->del_char = tgetstr("dc", NULL);
 	// termcaps->enter_del_mode = tgetstr("dm", NULL);
 	// termcaps->exit_del_mode = tgetstr("ed", NULL);
-	return (1);
+	return (0);
 }
 
 // makes a backup of the current terminal settings and then
