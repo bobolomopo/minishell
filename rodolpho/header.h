@@ -1,20 +1,23 @@
 #ifndef HEADER_H
 # define HEADER_H
 
+# include "libft.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <sys/wait.h>
 # include <sys/errno.h>
 # include <sys/stat.h>
 # include <string.h>
-# include "libft.h"
 # include <fcntl.h>
 # include <signal.h>
+# include <termios.h>
+# include <curses.h>
+# include <term.h>
 
-#define ARROW_UP -1
-#define ARROW_DOWN -2
+# define ARROW_UP -1
+# define ARROW_DOWN -2
 
-#define DOLLAR_SIGN -2
+# define DOLLAR_SIGN -2
 
 typedef struct	s_mem2clear
 {
@@ -74,6 +77,7 @@ enum	redirection_ops
 void	*g_ptr;
 
 // environment
+
 int		setup_env(t_shell_env *shell_env, char **envp);
 char	*find_var(char **env, char *var);
 int		set_var(t_shell_env *shell_env, char *var_name, char *value);
@@ -81,11 +85,13 @@ char	*expand_var(char **envp,char *var);
 void	remove_var(char *var_name, t_shell_env *shell_env);
 
 // signal handling
-void	signal_handler_c(int signal_code);
-void	sigquit_handler(int signal_code);
+
+void	setup_signal_handlers(void);
 
 // command-line
+
 int		init_termcaps(t_termcaps *termcaps);
+int		setup_terminal(struct termios *termios_p_backup);
 int		ft_readline(char **line, t_list **history, t_termcaps termcaps);
 void	arrow_up(char *buffer, char **backup, t_list *history, t_list **position);
 void	arrow_down(char *buffer, char **backup, t_list *history, t_list **position);

@@ -1,5 +1,6 @@
 #include "header.h"
 
+// for now, only interactive mode.
 int	main(int argc, char **argv, char **envp)
 {
 	char		*line;
@@ -8,11 +9,8 @@ int	main(int argc, char **argv, char **envp)
 	t_termcaps	termcaps;
 	t_shell_env	shell_env;
 
-	signal(SIGINT, signal_handler_c); // maybe only if in interactive mode?
-	signal(SIGQUIT, sigquit_handler); // maybe only if in interactive mode?
 	setup_env(&shell_env, envp);
-
-	// if interactive mode
+	setup_signal_handlers();
 	history = NULL;
 	init_termcaps(&termcaps);
 	while (1)
@@ -32,4 +30,3 @@ int	main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 }
-

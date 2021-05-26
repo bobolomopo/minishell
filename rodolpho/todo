@@ -24,6 +24,7 @@ env:
 	the _ variable ??
 
 	should I handle local vars?	this would affect what export VAR does (without =)
+	should I really copy the envp? can't I just use it?
 	
 
 error handling: (ideas)
