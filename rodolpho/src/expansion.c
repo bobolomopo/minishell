@@ -2,17 +2,14 @@
 
 // appends str2 to str1. The sources are freed (so they must be mallocd memory).
 // NULL + str2 = str2 (even if str is NULL)
-// str1 + NULL = str1
 // if error, returns NULL
-// obs: ft_strjoin returns NULL in case of error.
+// obs: ft_strjoin is protected, and returns NULL in case of error.
 char	*append(char *str1, char *str2)
 {
 	char	*dst;
 
 	if (!str1)
 		return (str2);
-	if (!str2)
-		return (str1);
 	dst = ft_strjoin(str1, str2);	
 	free(str1);
 	free(str2);
@@ -42,7 +39,9 @@ char	*get_chars_part(char **str)
 
 // returns the variable name in a freeable string moves pointer to first char
 // after name.
-// returns NULL if error or no valid name 
+// returns NULL if error. 
+// if the first characted is not_valid, the returned name will be the empty
+// string and the pointer will be moved to the next char (if not \0).
 char	*parse_var_name(char **str)
 {
 	int		len;
@@ -50,7 +49,11 @@ char	*parse_var_name(char **str)
 
 	ptr = *str;
 	if (!(ft_isalpha(**str) || **str == '_'))
-		return (NULL);
+	{
+		if (**str)
+			(*str)++;
+		return (ft_strdup(""));
+	}
 	(*str)++;
 	len = 1;
 	while (ft_isalnum(**str) || **str == '_')
@@ -63,8 +66,8 @@ char	*parse_var_name(char **str)
 
 // moves *str to char after var_name
 // returns a newly mallocd string containing the value of var
-// if var does not exits, returns the empty string.
-// NULL if error or var does not exist -- TODO fix this behavior to separate error from non exist.
+// if var has no valid name of if it does no exist, returns the empty string.
+// NULL if error.
 char	*get_var_value_part(char **str, t_shell_env *shell_env)
 {
 	char	*var_name;
@@ -77,13 +80,19 @@ char	*get_var_value_part(char **str, t_shell_env *shell_env)
 		return (ft_itoa(shell_env->question_mark)); // NOT SURE... unsigned char x int
 	}
 	var_name = parse_var_name(str);
-	if (!var_name)
-		return (NULL);
+	if (!var_name || !*var_name)
+		return (var_name);
 	var_value = expand_var(shell_env->envp, var_name);
 	free(var_name);
 	if (!var_value)
 		return (ft_strdup(""));
 	return (ft_strdup(var_value));
+}
+
+static char	*free_return_null(char *str)
+{
+	free(str);
+	return (NULL);
 }
 
 // expands all DOLLAR_SIGN-VAR_NAME occurrences into their respective values
@@ -99,12 +108,20 @@ char	*expand_str(char *str, t_shell_env *shell_env)
 	{
 		if (*str == DOLLAR_SIGN)
 		{
-			var_value_part = get_var_value_part(&str, shell_env); // TODO error handling
-			dst = append(dst, var_value_part); // TODO error handling
+			var_value_part = get_var_value_part(&str, shell_env);
+			if (!var_value_part)
+				return (free_return_null(dst));
+			dst = append(dst, var_value_part);
+			if (!dst)
+				return (NULL);
 			continue ;
 		}
-		chars_part = get_chars_part(&str); // TODO error handling
-		dst = append(dst, chars_part); // TODO error handling
+		chars_part = get_chars_part(&str);
+		if (!chars_part)
+			return (free_return_null(dst));
+		dst = append(dst, chars_part);
+		if (!dst)
+			return (NULL);
 	}
 	return (dst);
 }
@@ -122,6 +139,7 @@ int	contains_dollar(char *str)
 
 // check for DOLLAR_SIGN in every word, and replace word by another one
 // with the expanded variable
+// Returns -1 if error, 0 upon success.
 int	make_var_expansions(t_command *command, t_shell_env *shell_env)
 {
 	char	**arg;
@@ -132,7 +150,9 @@ int	make_var_expansions(t_command *command, t_shell_env *shell_env)
 	{
 		if (contains_dollar(*arg))
 		{
-			new_arg = expand_str(*arg, shell_env);  // error handling TODO...
+			new_arg = expand_str(*arg, shell_env);
+			if (!new_arg)
+				return (-1);
 			free(*arg);
 			*arg = new_arg;
 		}
