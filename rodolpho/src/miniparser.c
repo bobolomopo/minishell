@@ -65,21 +65,21 @@ t_list	*pipeline2list(char *pipeline)
 }
 
 // split line into pipelines and add them to list
-int	parse_line(char *line, t_list **commands_lst)
+int	parse_line(char *line, t_list **pipelines_lst)
 {
 	char	**array_of_pipelines;
 	int		i;
 	t_list	*pipeline;
 	t_list	*new;
 
-	*commands_lst = NULL;
+	*pipelines_lst = NULL;
 	array_of_pipelines = ft_split(line, ';');
 	i = 0;
 	while (array_of_pipelines[i])
 	{
 		pipeline = pipeline2list(array_of_pipelines[i]);
 		new = ft_lstnew(pipeline);
-		ft_lstadd_back(commands_lst, new);	
+		ft_lstadd_back(pipelines_lst, new);	
 		i++;
 	}
 	ft_free_split(array_of_pipelines);

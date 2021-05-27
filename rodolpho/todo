@@ -17,8 +17,6 @@ shell:
 expander:
 	parse_var_name: consider rewriting using is_valid_name, ft_strchr
 
-	better error handling!
-	non-existant variable: replace by ""
 	a dollar-sign followed by and invalid name should be considered an ordinary
 	'$' by the PARSER
 

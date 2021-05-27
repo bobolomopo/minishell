@@ -36,7 +36,7 @@ char	**copy_env(char **envp)
 
 // increment SHLVL variable, or set it to 1 if inexistant.
 // returns 0 upon success, -1 if error.
-int	increment_shlvl(t_shell_env *shell_env)
+int	increment_shlvl(t_sh_env *shell_env)
 {
 	int		lvl;
 	char	*lvl_str;
@@ -66,7 +66,7 @@ increments the SHLVL variable (an error here is non-fatal)
 sets the "?" special variable to 0
 removes OLDPWD variable
 */
-int	setup_env(t_shell_env *shell_env, char **envp)
+int	setup_env(t_sh_env *shell_env, char **envp)
 {
 	shell_env->envp = copy_env(envp);
 	if (!shell_env->envp)

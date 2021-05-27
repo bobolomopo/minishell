@@ -11,7 +11,7 @@ Establishes a connection with the terminfo database and gets the termcaps
 needed for ft_readline
 Returns -1 if error.
 */
-int	init_termcaps(t_termcaps *termcaps)
+int	init_termcaps(t_tcaps *termcaps)
 {
 	char	*term_type;
 	int		ret;

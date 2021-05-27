@@ -48,7 +48,7 @@ int	ctrl_d(t_cmdline *cmdline)
 // return 1 if key read successfully and input is not over
 // 0 if finished (enter key or ctrl-d)
 // -1 if error
-int	read_key_and_process(t_cmdline *cmdline, t_list *history, t_termcaps tc)
+int	read_key_and_process(t_cmdline *cmdline, t_list *history, t_tcaps tc)
 {
 	int	key;
 
@@ -78,7 +78,7 @@ Terminal is put in non-canonical mode and echo is disabled, to allow
 read() to get each key stroke. Terminal settings are recovered before
 exiting.
 */
-int	ft_readline(char **line, t_list *history, t_termcaps termcaps)
+int	ft_readline(char **line, t_list *history, t_tcaps termcaps)
 {
 	struct termios	termios_p_backup;
 	t_cmdline		cmdline;

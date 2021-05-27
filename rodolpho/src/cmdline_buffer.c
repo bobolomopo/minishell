@@ -79,7 +79,7 @@ int ft_putchar_stdout(int c)
 }
 
 // always returns 1 (caller expects that)
-int	delete_last_char(t_cmdline *cmdline, t_termcaps termcaps)
+int	delete_last_char(t_cmdline *cmdline, t_tcaps termcaps)
 {
 	if (cmdline->index == 0)
 		return (1);
@@ -92,7 +92,7 @@ int	delete_last_char(t_cmdline *cmdline, t_termcaps termcaps)
 	return (1);
 }
 
-void	refresh_display(t_cmdline *cmdline, t_termcaps termcaps)
+void	refresh_display(t_cmdline *cmdline, t_tcaps termcaps)
 {
 	tputs("\r", 1, ft_putchar_stdout);			// linux version
 	// tputs(termcaps.mv_cursor_col1, 1, ft_putchar_stdout); // mac version

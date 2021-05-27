@@ -19,9 +19,3 @@ int	ft_perror_ret(char *func_name, int return_value)
 	ft_perror(func_name);
 	return (return_value);
 }
-
-int	clear_mem_exit(t_shell_env *shell_env, int exit_code)
-{
-	clear_memory(shell_env);
-	exit (exit_code);
-}

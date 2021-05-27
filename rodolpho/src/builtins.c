@@ -1,6 +1,6 @@
 #include "header.h"
 
-int	builtin_env(char **argv, t_shell_env *shell_env)
+int	builtin_env(char **argv, t_sh_env *shell_env)
 {
 	int		i;
 	char	**envp;
@@ -13,7 +13,7 @@ int	builtin_env(char **argv, t_shell_env *shell_env)
 	return (0);
 }
 
-int	builtin_echo(char **argv, t_shell_env *shell_env)
+int	builtin_echo(char **argv, t_sh_env *shell_env)
 {
 	int	n_flag;
 	int	i;
@@ -36,7 +36,7 @@ int	builtin_echo(char **argv, t_shell_env *shell_env)
 }
 
 // it does not rely on PWD env variable (like bash also does not)
-int	builtin_pwd(char **argv, t_shell_env *shell_env)
+int	builtin_pwd(char **argv, t_sh_env *shell_env)
 {
 	char	*pwd;
 
@@ -53,7 +53,7 @@ int	builtin_pwd(char **argv, t_shell_env *shell_env)
 	return (0);
 }
 
-int	builtin_cd(char **argv, t_shell_env *shell_env)
+int	builtin_cd(char **argv, t_sh_env *shell_env)
 {
 	char	*path;
 	char	*pwd;
@@ -110,7 +110,7 @@ static void	print_error_msg_name(char *arg, char *builtin)
 	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
-int	builtin_export(char **argv, t_shell_env *shell_env)
+int	builtin_export(char **argv, t_sh_env *shell_env)
 {
 	int		i;
 	char	*var_name;
@@ -144,7 +144,7 @@ int	builtin_export(char **argv, t_shell_env *shell_env)
 	return (return_value);
 }
 
-int	builtin_unset(char **argv, t_shell_env *shell_env)
+int	builtin_unset(char **argv, t_sh_env *shell_env)
 {
 	int	i;
 	int	ret_value;

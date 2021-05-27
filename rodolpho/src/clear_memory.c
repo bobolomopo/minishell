@@ -27,18 +27,19 @@ void	clear_pipeline(void *ptr)
 	ft_lstclear(&lst, clear_command);
 }
 
-void	clear_commands_list(t_list **commands_list)
-{
-	ft_lstclear(commands_list, clear_pipeline);
-}
-
 // frees memory:
 // envp (array of strings)
 // history (list of strings)
-// commands_list (list of lists of t_command)
-void	clear_memory(t_shell_env *shell_env)
+// pipelines_lst (list of lists of t_command)
+void	clear_memory(t_sh_env *shell_env)
 {
 	ft_free_split(shell_env->envp);
 	ft_lstclear(&shell_env->mem2clear->history, free);
-	clear_commands_list(&shell_env->mem2clear->commands_list);
+	ft_lstclear(&shell_env->mem2clear->pipelines_lst, clear_pipeline);
+}
+
+int	clear_mem_exit(t_sh_env *shell_env, int exit_code)
+{
+	clear_memory(shell_env);
+	exit (exit_code);
 }

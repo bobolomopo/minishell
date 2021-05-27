@@ -68,7 +68,7 @@ char	*parse_var_name(char **str)
 // returns a newly mallocd string containing the value of var
 // if var has no valid name of if it does no exist, returns the empty string.
 // NULL if error.
-char	*get_var_value_part(char **str, t_shell_env *shell_env)
+char	*get_var_value_part(char **str, t_sh_env *shell_env)
 {
 	char	*var_name;
 	char	*var_value;
@@ -97,7 +97,7 @@ static char	*free_return_null(char *str)
 
 // expands all DOLLAR_SIGN-VAR_NAME occurrences into their respective values
 // returns a freeable str or NULL if error
-char	*expand_str(char *str, t_shell_env *shell_env)
+char	*expand_str(char *str, t_sh_env *shell_env)
 {
 	char	*dst;
 	char	*chars_part;
@@ -140,7 +140,7 @@ int	contains_dollar(char *str)
 // check for DOLLAR_SIGN in every word, and replace word by another one
 // with the expanded variable
 // Returns -1 if error, 0 upon success.
-int	make_var_expansions(t_command *command, t_shell_env *shell_env)
+int	make_var_expansions(t_command *command, t_sh_env *shell_env)
 {
 	char	**arg;
 	char	*new_arg;
@@ -165,7 +165,7 @@ int	make_var_expansions(t_command *command, t_shell_env *shell_env)
 
 // int	main(int argc, char **argv, char **envp)
 // {
-// 	t_shell_env	shell_env;
+// 	t_sh_env	shell_env;
 // 	char 	arg[100] = "hello $HOME$_$?bye$NOVAR";
 
 // 	char *ptr = arg;

@@ -2,7 +2,7 @@
 
 // makes a pipe - fork - dup2 cycle
 // returns read_end of pipe or -1 if error
-int	send_to_pipe(t_command *comm, t_shell_env *shell_env, int fd_in)
+int	send_to_pipe(t_command *comm, t_sh_env *shell_env, int fd_in)
 {
 	int	fd_pipe[2];
 	int	id;
@@ -32,7 +32,7 @@ int	send_to_pipe(t_command *comm, t_shell_env *shell_env, int fd_in)
 }
 
 // runs a list of n piped commands (2 or more)
-int	run_pipeline(t_list *lst, t_shell_env *shell_env, int n)
+int	run_pipeline(t_list *lst, t_sh_env *shell_env, int n)
 {
 	int		pipe_left_read_end;
 	pid_t	id;

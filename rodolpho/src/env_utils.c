@@ -47,7 +47,7 @@ int	count_vars(char **envp)
 }
 
 // new_var: pointer to string VAR=VALUE
-int	add_var(t_shell_env *shell_env,  char *new_var)
+int	add_var(t_sh_env *shell_env,  char *new_var)
 {
 	char	**new_envp;
 	int		n;
@@ -75,7 +75,7 @@ void	update_var(char **envp, int index, char *new_var)
 
 // adds var_name (if non-existant) or updates var_name's value in the environment.
 // returns 0 upon success, -1 if error (TODO...)
-int	set_var(t_shell_env *shell_env, char *var_name, char *value)
+int	set_var(t_sh_env *shell_env, char *var_name, char *value)
 {
 	char	*new_var;
 	int		size;
@@ -113,7 +113,7 @@ char	*expand_var(char **envp,char *var)
 
 // if var_name exists in envp, the string is freed and all contents to its right
 // are shift 1 position to the left (so, no reallocation)
-void	remove_var(char *var_name, t_shell_env *shell_env)
+void	remove_var(char *var_name, t_sh_env *shell_env)
 {
 	int		i;
 	char	**envp;

@@ -28,7 +28,7 @@
 
 typedef struct	s_mem2clear
 {
-	t_list	*commands_list;
+	t_list	*pipelines_lst;
 	t_list	*history;
 }				t_mem2clear;
 
@@ -37,7 +37,7 @@ typedef struct	s_shell_env
 	char			**envp;
 	unsigned char	question_mark;
 	t_mem2clear		*mem2clear;
-}				t_shell_env;
+}				t_sh_env;
 
 typedef	struct	s_cmdline
 {
@@ -58,7 +58,7 @@ typedef struct	s_termcaps
 	// char	*enter_del_mode;   // I'll have to try those again
 	// char	*del_char;
 	// char	*exit_del_mode;
-}				t_termcaps;
+}				t_tcaps;
 
 typedef struct	s_command
 {
@@ -85,11 +85,11 @@ void	*g_ptr;
 
 // environment
 
-int		setup_env(t_shell_env *shell_env, char **envp);
+int		setup_env(t_sh_env *shell_env, char **envp);
 char	*find_var(char **env, char *var);
-int		set_var(t_shell_env *shell_env, char *var_name, char *value);
+int		set_var(t_sh_env *shell_env, char *var_name, char *value);
 char	*expand_var(char **envp,char *var);
-void	remove_var(char *var_name, t_shell_env *shell_env);
+void	remove_var(char *var_name, t_sh_env *shell_env);
 
 // signal handling
 
@@ -97,43 +97,44 @@ void	setup_signal_handlers(void);
 
 // command-line
 
-int		init_termcaps(t_termcaps *termcaps);
+int		init_termcaps(t_tcaps *termcaps);
 int		setup_terminal(struct termios *termios_p_backup);
-int		ft_readline(char **line, t_list *history, t_termcaps termcaps);
-int		arrow_up(t_cmdline *cmdline, t_list *history, t_termcaps termcaps);
-int		arrow_down(t_cmdline *cmdline, t_list *history, t_termcaps termcaps);
+int		ft_readline(char **line, t_list *history, t_tcaps termcaps);
+int		arrow_up(t_cmdline *cmdline, t_list *history, t_tcaps termcaps);
+int		arrow_down(t_cmdline *cmdline, t_list *history, t_tcaps termcaps);
 
 int		initialize_cmdline(t_cmdline *cmdline, t_list *history);
 int		add_char(int key, t_cmdline *cmdline);
-int		delete_last_char(t_cmdline *cmdline, t_termcaps termcaps);
-void	refresh_display(t_cmdline *cmdline, t_termcaps termcaps);
+int		delete_last_char(t_cmdline *cmdline, t_tcaps termcaps);
+void	refresh_display(t_cmdline *cmdline, t_tcaps termcaps);
 
 // mini-parser (for tests)
 int		parse_line(char *line, t_list **commands_lst);
 
 // expansion
-int		make_var_expansions(t_command *command, t_shell_env *shell_env);
+int		make_var_expansions(t_command *command, t_sh_env *shell_env);
 char	*parse_var_name(char **str);
 
 // execution
 
-int		execute_line(t_list *lst, t_shell_env *shell_env);
-int		launch_command(t_command *command, t_shell_env *shell_env);
-int		run_pipeline(t_list *lst, t_shell_env *shell_env, int n);
+int		execute_line(t_list *lst, t_sh_env *shell_env);
+int		launch_command(t_command *command, t_sh_env *shell_env);
+int		run_pipeline(t_list *lst, t_sh_env *shell_env, int n);
 int		resolve_path(char *command, char **path);
 
 // builtins
-int		builtin_env(char **argv, t_shell_env *shell_env);
-int		builtin_echo(char **argv, t_shell_env *shell_env);
-int		builtin_pwd(char **argv, t_shell_env *shell_env);
-int		builtin_cd(char **argv, t_shell_env *shell_env);
-int		builtin_export(char **argv, t_shell_env *shell_env);
-int		builtin_exit(char **argv, t_shell_env *shell_env);
-int		builtin_unset(char **argv, t_shell_env *shell_env);
+int		builtin_env(char **argv, t_sh_env *shell_env);
+int		builtin_echo(char **argv, t_sh_env *shell_env);
+int		builtin_pwd(char **argv, t_sh_env *shell_env);
+int		builtin_cd(char **argv, t_sh_env *shell_env);
+int		builtin_export(char **argv, t_sh_env *shell_env);
+int		builtin_exit(char **argv, t_sh_env *shell_env);
+int		builtin_unset(char **argv, t_sh_env *shell_env);
 
 // clear memory
-void	clear_memory(t_shell_env *shell_env);
-void	clear_commands_list(t_list **commands_list);
+void	clear_memory(t_sh_env *shell_env);
+int		clear_mem_exit(t_sh_env *shell_env, int exit_code);
+void	clear_pipeline(void *ptr);
 
 // errors
 void	ft_perror(char *func_name);

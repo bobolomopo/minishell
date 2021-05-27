@@ -28,7 +28,7 @@ void print_list_commands(t_list *list_of_pipelines)
 // lst is a list of pipelines
 // executes every pipeline
 // a pipeline of size 1 is run by lauch_command. Otherwise, by run_pipeline
-int	execute_line(t_list *lst, t_shell_env *shell_env)
+int	execute_line(t_list *lst, t_sh_env *shell_env)
 {
 	t_list	*pipeline;
 	int		n_commands;

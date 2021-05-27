@@ -28,7 +28,7 @@ int	error_too_many_args(int return_value)
 	return (return_value);
 }
 
-int	builtin_exit(char **argv, t_shell_env *shell_env)
+int	builtin_exit(char **argv, t_sh_env *shell_env)
 {
 	int	exit_code;
 

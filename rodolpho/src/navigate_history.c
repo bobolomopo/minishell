@@ -45,7 +45,7 @@ NULL: none, new command being typed
 /*
 returns -1 if error, 1 otherwise (caller expects that)
 */
-int	arrow_up(t_cmdline *cmdline, t_list *history, t_termcaps termcaps)
+int	arrow_up(t_cmdline *cmdline, t_list *history, t_tcaps termcaps)
 {
 	if (history == NULL)
 		return (1);
@@ -66,7 +66,7 @@ int	arrow_up(t_cmdline *cmdline, t_list *history, t_termcaps termcaps)
 }
 
 // always returns 1 (caller expects that)
-int	arrow_down(t_cmdline *cmdline, t_list *history, t_termcaps termcaps)
+int	arrow_down(t_cmdline *cmdline, t_list *history, t_tcaps termcaps)
 {
 	if (cmdline->position == NULL)
 		return (1);

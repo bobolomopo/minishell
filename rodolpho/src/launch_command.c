@@ -103,9 +103,9 @@ int	is_builtin(char *command_name)
 
 // jump table to call builtin command (array of pointers to functions)
 // indexes must match those in is_builtin()
-int	call_builtin(int builtin_index, char **argv, t_shell_env *shell_env)
+int	call_builtin(int builtin_index, char **argv, t_sh_env *shell_env)
 {
-	static int (*f[7])(char **, t_shell_env *) = {builtin_echo, builtin_cd,
+	static int (*f[7])(char **, t_sh_env *) = {builtin_echo, builtin_cd,
 	builtin_pwd, builtin_export, builtin_unset, builtin_env, builtin_exit};
 	
 	return (f[builtin_index](argv, shell_env));
@@ -154,7 +154,7 @@ int	exec_binary(char **argv, char **envp)
 // and restores stdin, stdout and stderr
 // if command is a builtin, a function is called and run in the same process (no fork)
 // if not a builtin, its is executed by a sub-shell (a child process)
-int	launch_command(t_command *command, t_shell_env *shell_env)
+int	launch_command(t_command *command, t_sh_env *shell_env)
 {
 	int	back_up_fds[3];
 	int	ret;
