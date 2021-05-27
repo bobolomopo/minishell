@@ -1,6 +1,6 @@
 #include "header.h"
 
-// for testing/debugging
+// this function is only here for testing/debugging
 void print_list_commands(t_list *list_of_pipelines)
 {
 	t_command *command_struc;
@@ -26,6 +26,8 @@ void print_list_commands(t_list *list_of_pipelines)
 }
 
 // lst is a list of pipelines
+// executes every pipeline
+// a pipeline of size 1 is run by lauch_command. Otherwise, by run_pipeline
 int	execute_line(t_list *lst, t_shell_env *shell_env)
 {
 	t_list	*pipeline;

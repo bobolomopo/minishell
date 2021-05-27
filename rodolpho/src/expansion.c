@@ -141,6 +141,8 @@ int	make_var_expansions(t_command *command, t_shell_env *shell_env)
 	return (0);
 }
 
+// stuff of testing
+
 // int	main(int argc, char **argv, char **envp)
 // {
 // 	t_shell_env	shell_env;

@@ -116,6 +116,7 @@ int		make_var_expansions(t_command *command, t_shell_env *shell_env);
 char	*parse_var_name(char **str);
 
 // execution
+
 int		execute_line(t_list *lst, t_shell_env *shell_env);
 int		launch_command(t_command *command, t_shell_env *shell_env);
 int		run_pipeline(t_list *lst, t_shell_env *shell_env, int n);

@@ -34,21 +34,35 @@ char	**copy_env(char **envp)
 	return (shell_envp);
 }
 
-// works for levels up to 9
-// TODO: make it work for bigger numbers...
-void	increment_shlvl(char **env)
+// increment SHLVL variable, or set it to 1 if inexistant.
+// returns 0 upon success, -1 if error.
+int	increment_shlvl(t_shell_env *shell_env)
 {
-	char	*var;
+	int		lvl;
+	char	*lvl_str;
+	int		ret;
 
-	var = find_var(env, "SHLVL");
-	if (!var)
-		return ;
-	var[6]++;
+	lvl_str = expand_var(shell_env->envp, "SHLVL");
+	if (!lvl_str || !*lvl_str)
+		return (set_var(shell_env, "SHLVL", "1"));
+	lvl = ft_atoi(lvl_str);
+	if (lvl < 9 && ft_isdigit(*lvl_str))
+	{
+		lvl_str[0] += 1;
+		lvl_str[1] = '\0';
+		return (0);
+	}	
+	lvl_str = ft_itoa(lvl + 1);
+	if (!lvl_str)
+		return (ft_perror_ret("ft_itoa", -1));
+	ret = set_var(shell_env, "SHLVL", lvl_str);
+	free(lvl_str);
+	return (ret);
 }
 
 /*
 makes a copy of the environment
-increments the SHLVL variable
+increments the SHLVL variable (an error here is non-fatal)
 sets the "?" special variable to 0
 removes OLDPWD variable
 */
@@ -56,11 +70,12 @@ int	setup_env(t_shell_env *shell_env, char **envp)
 {
 	shell_env->envp = copy_env(envp);
 	if (!shell_env->envp)
+		return (-1);
+	if (increment_shlvl(shell_env) == -1)
 	{
-
+		ft_free_split(shell_env->envp);
 		return (-1);
 	}
-	increment_shlvl(shell_env->envp);
 	remove_var("OLDPWD", shell_env);
 	shell_env->question_mark = 0;
 	return (0);

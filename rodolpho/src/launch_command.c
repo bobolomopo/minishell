@@ -150,7 +150,10 @@ int	exec_binary(char **argv, char **envp)
 	return (-1); // decide what to return...
 }
 
-// performs redirections, executes command and restores stdin, stdout and stderr
+// performs variable expansion, redirections, executes command 
+// and restores stdin, stdout and stderr
+// if command is a builtin, a function is called and run in the same process (no fork)
+// if not a builtin, its is executed by a sub-shell (a child process)
 int	launch_command(t_command *command, t_shell_env *shell_env)
 {
 	int	back_up_fds[3];

@@ -18,7 +18,7 @@ static int	get_max_len(t_list *history)
 
 /* Allocates memory for the buffer, size big enough to hold any of the contents
 in the history.
-Affectates the address of cmdline to the global variable g_ptr
+Assignates the address of cmdline to the global variable g_ptr
 (signalhandler needs it).
 Displays the prompt.
 */

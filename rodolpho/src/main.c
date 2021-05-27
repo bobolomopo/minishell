@@ -11,6 +11,7 @@ int	line_is_blank(char *line)
 	return (1);
 }
 
+// adds the last command-line to the history
 // upon error, message is displayed, but this error is non-fatal
 // for the shell.
 void	add_to_history(char *line, t_list **history)
