@@ -37,8 +37,8 @@ int	initialize_shell(char **envp, t_sh_env *shenv, t_list **history, t_tcaps *tc
 	if (setup_env(shenv, envp) == -1)
 		return (-1);
 	*history = NULL;
-	shenv->mem2clear->history = NULL;
-	shenv->mem2clear->pipelines_lst = NULL;
+	shenv->mem2clear.history = NULL;
+	shenv->mem2clear.pipelines_lst = NULL;
 	return (0);
 }
 
@@ -58,10 +58,10 @@ int	main(int argc, char **argv, char **envp)
 		if (ft_readline(&line, history, termcaps) == -1)
 			return (clear_mem_exit(&shell_env, 1));
 		add_to_history(line, &history);
-		shell_env.mem2clear->history = history;
+		shell_env.mem2clear.history = history;
 	
 		parse_line(line, &pipelines_lst); // lexer - parser
-		shell_env.mem2clear->pipelines_lst = pipelines_lst;
+		shell_env.mem2clear.pipelines_lst = pipelines_lst;
 
 		execute_line(pipelines_lst, &shell_env); // execute all pipelines
 		ft_lstclear(&pipelines_lst, clear_pipeline);

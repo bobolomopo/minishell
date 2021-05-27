@@ -36,7 +36,7 @@ typedef struct	s_shell_env
 {
 	char			**envp;
 	unsigned char	question_mark;
-	t_mem2clear		*mem2clear;
+	t_mem2clear		mem2clear;
 }				t_sh_env;
 
 typedef	struct	s_cmdline

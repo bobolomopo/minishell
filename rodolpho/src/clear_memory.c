@@ -34,8 +34,8 @@ void	clear_pipeline(void *ptr)
 void	clear_memory(t_sh_env *shell_env)
 {
 	ft_free_split(shell_env->envp);
-	ft_lstclear(&shell_env->mem2clear->history, free);
-	ft_lstclear(&shell_env->mem2clear->pipelines_lst, clear_pipeline);
+	ft_lstclear(&shell_env->mem2clear.history, free);
+	ft_lstclear(&shell_env->mem2clear.pipelines_lst, clear_pipeline);
 }
 
 int	clear_mem_exit(t_sh_env *shell_env, int exit_code)

@@ -1,3 +1,10 @@
+memory management:
+	a forked process leaks memory if it exits without freeing the heap.
+	an execd process, ok, no problem (?), apparently.
+	So, if exec returns, gotta clear memory before exiting.
+	Watch out for the pipeline function...
+
+
 ft_read_line:
 	write double-linked list funcions for libft and use them for history navigation
 
