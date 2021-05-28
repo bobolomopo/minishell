@@ -112,15 +112,20 @@ void	refresh_display(t_cmdline *cmdline, t_tcaps termcaps);
 int		parse_line(char *line, t_list **commands_lst);
 
 // expansion
+
 int		make_var_expansions(t_command *command, t_sh_env *shell_env);
 char	*parse_var_name(char **str);
 
 // execution
 
 int		execute_line(t_list *lst, t_sh_env *shell_env);
-int		launch_command(t_command *command, t_sh_env *shell_env);
 int		run_pipeline(t_list *lst, t_sh_env *shell_env, int n);
 int		resolve_path(char *command, char **path);
+int		process_redirections_list(t_list *lst);
+int		is_builtin(char *command_name);
+int		run_builtin(int builtin_index, t_command *command, t_sh_env *shenv);
+void	exec_bin(t_command *command, t_sh_env *shenv);
+int		exit_code_from_child(int status);
 
 // builtins
 int		builtin_env(char **argv, t_sh_env *shell_env);
@@ -137,7 +142,11 @@ int		clear_mem_exit(t_sh_env *shell_env, int exit_code);
 void	clear_pipeline(void *ptr);
 
 // errors
+
 void	ft_perror(char *func_name);
 int		ft_perror_ret(char *func_name, int return_value);
+
+
+void print_list_commands(t_list *list_of_pipelines);
 
 #endif
