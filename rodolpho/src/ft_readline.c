@@ -8,22 +8,19 @@ Arrow down: '\033' '[' 'B'
 */
 int	detect_key(void)
 {
-	char	buffer[2];
+	char	buffer[3];
 	int		ret;
 
-	ret = read(0, buffer, 1);
+	ret = read(0, buffer, 3); // MAKING TESTS HERE
 	if (ret == -1)
 		return (ft_perror_ret("read", -1));
 	if (buffer[0] == '\033')
 	{
-		ret = read(0, buffer, 2);
-		if (ret == -1)
-			return (ft_perror_ret("read", -1));
-		if (buffer[0] == '[')
+		if (buffer[1] == '[')
 		{
-			if (buffer[1] == 'A')
+			if (buffer[2] == 'A')
 				return (ARROW_UP);
-			if (buffer[1] == 'B')
+			if (buffer[2] == 'B')
 				return (ARROW_DOWN);
 		}
 		return (0);
