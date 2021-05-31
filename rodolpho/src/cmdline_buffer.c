@@ -41,6 +41,12 @@ int	initialize_cmdline(t_cmdline *cmdline, t_list *history)
 	return (0);
 }
 
+void	close_cmdline(t_cmdline *cmdline)
+{
+	free(cmdline->backup_buffer);
+	g_ptr = NULL;
+}
+
 static int	grow_buffer(t_cmdline *cmdline)
 {
 	char	*new_buffer;

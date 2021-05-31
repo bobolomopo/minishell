@@ -55,3 +55,11 @@ int	setup_terminal(struct termios *termios_p_backup)
 		return (-1);
 	return (0);
 }
+
+// recover terminal settings.
+// if error, display error msg.
+void	reset_terminal(struct termios *termios_p_backup)
+{
+	if (tcsetattr(0, 0, termios_p_backup) == -1)
+		ft_perror("tcsetattr");
+}

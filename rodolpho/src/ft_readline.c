@@ -94,8 +94,7 @@ int	ft_readline(char **line, t_list *history, t_tcaps termcaps)
 		free(cmdline.buffer);
 	else
 		*line = cmdline.buffer;
-	free(cmdline.backup_buffer);
-	g_ptr = NULL;
-	tcsetattr(0, 0, &termios_p_backup);
+	close_cmdline(&cmdline);
+	reset_terminal(&termios_p_backup);
 	return (ret);
 }

@@ -99,11 +99,13 @@ void	setup_signal_handlers(void);
 
 int		init_termcaps(t_tcaps *termcaps);
 int		setup_terminal(struct termios *termios_p_backup);
+void	reset_terminal(struct termios *termios_p_backup);
 int		ft_readline(char **line, t_list *history, t_tcaps termcaps);
 int		arrow_up(t_cmdline *cmdline, t_list *history, t_tcaps termcaps);
 int		arrow_down(t_cmdline *cmdline, t_list *history, t_tcaps termcaps);
 
 int		initialize_cmdline(t_cmdline *cmdline, t_list *history);
+void	close_cmdline(t_cmdline *cmdline);
 int		add_char(int key, t_cmdline *cmdline);
 int		delete_last_char(t_cmdline *cmdline, t_tcaps termcaps);
 void	refresh_display(t_cmdline *cmdline, t_tcaps termcaps);
