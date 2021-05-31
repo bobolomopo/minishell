@@ -2,32 +2,32 @@
 
 /*
 Reads a key press from the terminal.
-Escape sequences:
-Arrow up: '\033' '[' 'A'
-Arrow down: '\033' '[' 'B'
+If single byte is read, returns its value.
+If the 3-byte sequences 27 91 65 or 27 91 66 are read, returns ARROW_UP /
+ARROW_DOWN, respectively.
+Otherwise, returns 0, or -1 if error.
 */
 int	detect_key(void)
 {
-	char	buffer[3];
+	char	buffer[6];
 	int		ret;
 
-	ret = read(0, buffer, 3); // MAKING TESTS HERE
+	ret = read(0, buffer, 6);
 	if (ret == -1)
 		return (ft_perror_ret("read", -1));
-	if (buffer[0] == '\033')
+	if (ret == 1)
+		return (buffer[0]);
+	if (ret == 3 && buffer[0] == 27 && buffer[1] == 91)
 	{
-		if (buffer[1] == '[')
-		{
-			if (buffer[2] == 'A')
-				return (ARROW_UP);
-			if (buffer[2] == 'B')
-				return (ARROW_DOWN);
-		}
-		return (0);
+		if (buffer[2] == 65)
+			return (ARROW_UP);
+		if (buffer[2] == 66)
+			return (ARROW_DOWN);
 	}
-	return (buffer[0]);
+	return (0);
 }
 
+// returns 0
 int	enter_key(t_cmdline *cmdline)
 {
 	write(1, "\n", 1);
@@ -35,6 +35,7 @@ int	enter_key(t_cmdline *cmdline)
 	return (0);
 }
 
+// returns 0
 int	ctrl_d(t_cmdline *cmdline)
 {
 	ft_putendl_fd("exit", 1);
@@ -56,14 +57,14 @@ int	read_key_and_process(t_cmdline *cmdline, t_list *history, t_tcaps tc)
 		return (add_char(key, cmdline));
 	if (key == BACKSPACE)
 		return (delete_last_char(cmdline, tc));
+	if (key == ARROW_UP)
+		return (arrow_up(cmdline, history, tc));
+	if (key == ARROW_DOWN)
+		return (arrow_down(cmdline, history, tc));
 	if (key == ENTER_KEY)
 		return (enter_key(cmdline));
 	if (key == CTRL_D && cmdline->index == 0)
 		return (ctrl_d(cmdline));
-	if (key == ARROW_DOWN)
-		return (arrow_down(cmdline, history, tc));
-	if (key == ARROW_UP)
-		return (arrow_up(cmdline, history, tc));
 	return (1);
 }
 
