@@ -1,9 +1,9 @@
 SRCS = main.c ft_readline.c navigate_history.c miniparser.c \
-		error.c resolve_path.c env_utils.c builtins_env_echo_pwd.c \
+		error.c resolve_path.c env_utils.c builtins_env_echo_pwd_unset.c \
 		signal_handler.c expansion.c clear_memory.c builtin_exit.c \
 		env_setup.c termcaps_termios.c cmdline_buffer.c execute_line.c \
 		pipeline.c redirections.c run_builtin.c execute_binary.c \
-		builtin_cd.c builtins_export_unset.c
+		builtin_cd.c builtin_export.c
 
 SRC = $(addprefix src/,$(SRCS))
 OBJ = $(SRC:.c=.o)

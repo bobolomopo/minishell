@@ -6,20 +6,12 @@ ft_read_line:
 builtins:
 	export (the no args case)
 
-
 shell:
 	non-interactive shell case (use get_next_line)
 		istty function
 
 	signals: 
 		-->	should I implement any other signal handler other than SIGINT and SIGQUIT ?
-
-expander:
-	parse_var_name: consider rewriting using is_valid_name, ft_strchr
-
-	a dollar-sign followed by and invalid name should be considered an ordinary
-	'$' by the PARSER
-
 
 env:
 	set PWD when the shell starts???
@@ -62,3 +54,6 @@ NOTES:
 	export and env
 		export lists all variables in env, including those whose value it the empty string
 		env only displays the ones that have a values other than the empty string
+	expander:
+		a dollar-sign followed by and invalid name should be considered an ordinary
+		'$' by the PARSER

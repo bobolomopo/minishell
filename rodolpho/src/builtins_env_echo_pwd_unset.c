@@ -49,3 +49,23 @@ int	builtin_pwd(char **argv, t_sh_env *shell_env)
 	free(pwd);
 	return (0);
 }
+
+int	builtin_unset(char **argv, t_sh_env *shell_env)
+{
+	int	i;
+	int	ret_value;
+
+	i = 0;
+	ret_value = 0;
+	while (argv[++i])
+	{
+		if (is_valid_name(argv[i]))
+			remove_var(argv[i], shell_env);
+		else
+		{
+			print_error_msg_name(argv[i], "unset");
+			ret_value = 1;
+		}
+	}
+	return (ret_value);
+}

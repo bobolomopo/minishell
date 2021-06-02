@@ -135,6 +135,9 @@ int		builtin_export(char **argv, t_sh_env *shell_env);
 int		builtin_exit(char **argv, t_sh_env *shell_env);
 int		builtin_unset(char **argv, t_sh_env *shell_env);
 
+int		is_valid_name(char *var);
+void	print_error_msg_name(char *arg, char *builtin);
+
 // clear memory
 
 void	clear_memory(t_sh_env *shell_env);
