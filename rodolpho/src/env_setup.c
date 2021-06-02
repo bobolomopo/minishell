@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env_setup.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/02 18:06:14 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/02 18:06:15 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 char	**env_copy_error(char **envp)
@@ -10,10 +22,10 @@ char	**env_copy_error(char **envp)
 
 char	**copy_env(char **envp)
 {
-	int	i;
-	int	n;
-	char **shell_envp;
-	int	len;
+	int		i;
+	int		n;
+	char	**shell_envp;
+	int		len;
 
 	n = 0;
 	while (envp[n])

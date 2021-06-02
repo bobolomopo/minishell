@@ -3,9 +3,6 @@
 ft_read_line:
 	write double-linked list funcions for libft and use them for history navigation
 
-builtins:
-	export (the no args case)
-
 shell:
 	non-interactive shell case (use get_next_line)
 		istty function
@@ -19,10 +16,7 @@ env:
 
 	should I handle local vars?	this would affect what export VAR does (without =)
 	should I really copy the envp? can't I just use it?
-	
 
-error handling: (ideas)
-	function int free_ret(void *ptr, int ret) : frees ptr and returns ret (0 can be used for returning NULL pointer)
 
 libft: 
 	protect ft_free_split

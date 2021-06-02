@@ -82,7 +82,7 @@ void	*g_ptr;
 // environment
 
 int		setup_env(t_sh_env *shell_env, char **envp);
-char	*find_var(char **env, char *var);
+int		find_var_index(char **envp, char *var);
 int		set_var(t_sh_env *shell_env, char *var_name, char *value);
 char	*expand_var(char **envp,char *var);
 void	remove_var(char *var_name, t_sh_env *shell_env);
