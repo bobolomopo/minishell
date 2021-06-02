@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_cd.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/02 17:50:04 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/02 17:50:05 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 // if path is NULL, expands the HOME variable. If it is non-existant,
@@ -33,7 +45,7 @@ static int	set_pwd_oldpwd_vars(char *old_pwd, t_sh_env *shenv)
 	if (!pwd)
 		ft_perror("getcwd");
 	if (!pwd || set_var(shenv, "PWD", pwd) == -1)
-		ret = 1; 
+		ret = 1;
 	free(pwd);
 	return (ret);
 }

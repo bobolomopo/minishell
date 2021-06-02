@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_exit.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/02 17:51:16 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/02 17:51:17 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 static int	is_numeric(char *str)
@@ -35,7 +47,7 @@ int	builtin_exit(char **argv, t_sh_env *shell_env)
 	if (argv[1] && argv[2])
 		return (error_too_many_args(1));
 	if (!argv[1])
-		exit_code = shell_env->question_mark; // unsigned char to int cast done here...
+		exit_code = shell_env->question_mark;
 	else
 	{
 		if (!is_numeric(argv[1]))

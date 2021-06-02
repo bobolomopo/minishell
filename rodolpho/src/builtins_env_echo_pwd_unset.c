@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtins_env_echo_pwd_unset.c                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/02 17:54:15 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/02 17:54:16 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 int	builtin_env(char **argv, t_sh_env *shell_env)
@@ -8,7 +20,7 @@ int	builtin_env(char **argv, t_sh_env *shell_env)
 	(void)argv;
 	envp = shell_env->envp;
 	i = 0;
-	while (envp[i]) 
+	while (envp[i])
 		ft_putendl_fd(envp[i++], 1);
 	return (0);
 }

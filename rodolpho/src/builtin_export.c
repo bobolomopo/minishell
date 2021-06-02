@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   builtin_export.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/02 17:53:29 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/02 17:53:30 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 int	is_valid_name(char *var)
@@ -61,7 +73,7 @@ static int	export_var(char *arg, t_sh_env *shenv)
 	return (ret);
 }
 
- // for now, only name=value will take effect ("export name" does nothing)
+// for now, only name=value will take effect ("export name" does nothing)
 int	builtin_export(char **argv, t_sh_env *shell_env)
 {
 	int		i;

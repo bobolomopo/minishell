@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmdline_buffer.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/02 17:59:46 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/02 17:59:47 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 static int	get_max_len(t_list *history)
@@ -77,34 +89,4 @@ int	add_char(int key, t_cmdline *cmdline)
 	cmdline->buffer[cmdline->index] = (char)key;
 	cmdline->index++;
 	return (1);
-}
-
-// this prototype is a requirement for tputs 
-int ft_putchar_stdout(int c)
-{
-	return (write(1, &c, 1));
-}
-
-// always returns 1 (caller expects that)
-// CONSIDER changing tputs by simply write(1, "\r", 1) for these two next functions
-int	delete_last_char(t_cmdline *cmdline, t_tcaps termcaps)
-{
-	if (cmdline->index == 0)
-		return (1);
-
-	// tputs(termcaps.mv_cursor_left, 1, ft_putchar_stdout); // move cursor left - MacOS version
-	tputs("\b", 1, ft_putchar_stdout); // move cursor left - LINUX version
-	tputs(termcaps.cl_to_endline, 1, ft_putchar_stdout); // clear to end of line
-
-	cmdline->index--;
-	return (1);
-}
-
-void	refresh_display(t_cmdline *cmdline, t_tcaps termcaps)
-{
-	tputs("\r", 1, ft_putchar_stdout);			// linux version
-	// tputs(termcaps.mv_cursor_col1, 1, ft_putchar_stdout); // mac version
-	tputs(termcaps.cl_line, 1, ft_putchar_stdout);
-	write(1, PROMPT, ft_strlen(PROMPT));
-	write(1, cmdline->buffer, cmdline->index);
 }
