@@ -46,18 +46,14 @@ typedef	struct	s_cmdline
 	int		index;
 	char	*backup_buffer;
 	t_list	*position;
-
 }				t_cmdline;
 
 typedef struct	s_termcaps
 {
 	char	*cl_line;
 	char	*cl_to_endline;
-	char	*mv_cursor_col1;
-	char	*mv_cursor_left;
-	// char	*enter_del_mode;   // I'll have to try those again
-	// char	*del_char;
-	// char	*exit_del_mode;
+	char	*mv_cursor_col1; // can be replaced by a simple "\r"
+	char	*mv_cursor_left; // can be replaced by a simple "\b"
 }				t_tcaps;
 
 typedef struct	s_command
@@ -95,7 +91,7 @@ void	remove_var(char *var_name, t_sh_env *shell_env);
 
 void	setup_signal_handlers(void);
 
-// command-line
+// command-line and ft_realine
 
 int		init_termcaps(t_tcaps *termcaps);
 int		setup_terminal(struct termios *termios_p_backup);
@@ -103,7 +99,6 @@ void	reset_terminal(struct termios *termios_p_backup);
 int		ft_readline(char **line, t_list *history, t_tcaps termcaps);
 int		arrow_up(t_cmdline *cmdline, t_list *history, t_tcaps termcaps);
 int		arrow_down(t_cmdline *cmdline, t_list *history, t_tcaps termcaps);
-
 int		initialize_cmdline(t_cmdline *cmdline, t_list *history);
 void	close_cmdline(t_cmdline *cmdline);
 int		add_char(int key, t_cmdline *cmdline);
@@ -111,6 +106,7 @@ int		delete_last_char(t_cmdline *cmdline, t_tcaps termcaps);
 void	refresh_display(t_cmdline *cmdline, t_tcaps termcaps);
 
 // mini-parser (for tests)
+
 int		parse_line(char *line, t_list **commands_lst);
 
 // expansion
@@ -122,7 +118,7 @@ char	*parse_var_name(char **str);
 
 int		execute_line(t_list *lst, t_sh_env *shell_env);
 int		run_pipeline(t_list *lst, t_sh_env *shell_env, int n);
-int		resolve_path(char *command, char **path);
+int		resolve_path(char *command, char **path, char **envp);
 int		process_redirections_list(t_list *lst);
 int		is_builtin(char *command_name);
 int		run_builtin(int builtin_index, t_command *command, t_sh_env *shenv);
@@ -130,6 +126,7 @@ void	exec_bin(t_command *command, t_sh_env *shenv);
 int		exit_code_from_child(int status);
 
 // builtins
+
 int		builtin_env(char **argv, t_sh_env *shell_env);
 int		builtin_echo(char **argv, t_sh_env *shell_env);
 int		builtin_pwd(char **argv, t_sh_env *shell_env);
@@ -139,6 +136,7 @@ int		builtin_exit(char **argv, t_sh_env *shell_env);
 int		builtin_unset(char **argv, t_sh_env *shell_env);
 
 // clear memory
+
 void	clear_memory(t_sh_env *shell_env);
 int		clear_mem_exit(t_sh_env *shell_env, int exit_code);
 void	clear_pipeline(void *ptr);
@@ -148,6 +146,7 @@ void	clear_pipeline(void *ptr);
 void	ft_perror(char *func_name);
 int		ft_perror_ret(char *func_name, int return_value);
 
+// debugging tools
 
 void print_list_commands(t_list *list_of_pipelines);
 

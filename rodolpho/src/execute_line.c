@@ -1,32 +1,5 @@
 #include "header.h"
 
-// function to be called by a subshell (child process).
-// This function does not return. It exits.
-void	exec_bin(t_command *command, t_sh_env *shenv)
-{
-	int		ret;
-	char	*path;
-
-	if (process_redirections_list(command->redirections) == -1)
-		clear_mem_exit(shenv, -1);
-	ret = resolve_path(command->argv[0], &path);
-	if (ret == -1)
-		clear_mem_exit(shenv, -1); // todo: error msg from resolve path
-	if (ret == 0)
-	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(command->argv[0], 2);
-		ft_putendl_fd(": command not found", 2);
-		clear_mem_exit(shenv, 127);
-	}
-	execve(path, command->argv, shenv->envp);
-	// only executed in case of error:
-	ft_putstr_fd("minishell: ", 2);
-	ft_perror(path);
-	free(path);
-	clear_mem_exit(shenv, 127); // or 126 if command found but not executable
-}
-
 int	exit_code_from_child(int status)
 {
 	if (WIFEXITED(status))

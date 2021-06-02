@@ -1,8 +1,3 @@
-memory management:
-	a forked process leaks memory if it exits without freeing the heap.
-	an execd process, ok, no problem (?), apparently.
-	So, if exec returns, gotta clear memory before exiting.
-	Watch out for the pipeline function...
 
 
 ft_read_line:
@@ -55,6 +50,10 @@ NOTES:
 			and the return value will be 131 (128 + 3)
 		read() reads 4 when ctrl-d is pressed.
 
+	memory management:
+		a forked process leaks memory if it exits without freeing the heap.
+		an execd process, ok, no problem (?), apparently.
+		So, if exec returns, gotta clear memory before exiting.
 
 	expansion must be done right before execution
 	of a simple command or pipeline.

@@ -64,7 +64,8 @@ static int	grow_buffer(t_cmdline *cmdline)
 }
 
 /*
-Echoes key back to the screen and adds it to buffer.
+Echoes key back to the screen and adds it to buffer (it might call grow_buffer
+if more space is needed).
 Returns -1 if error, 1 otherwise (caller expects that).
 */
 int	add_char(int key, t_cmdline *cmdline)
@@ -72,7 +73,7 @@ int	add_char(int key, t_cmdline *cmdline)
 	if (cmdline->index == cmdline->size - 1)
 		if (grow_buffer(cmdline) == -1)
 			return (-1);
-	write(1, &key, 1); // echo to screen
+	write(1, &key, 1);
 	cmdline->buffer[cmdline->index] = (char)key;
 	cmdline->index++;
 	return (1);
@@ -85,6 +86,7 @@ int ft_putchar_stdout(int c)
 }
 
 // always returns 1 (caller expects that)
+// CONSIDER changing tputs by simply write(1, "\r", 1) for these two next functions
 int	delete_last_char(t_cmdline *cmdline, t_tcaps termcaps)
 {
 	if (cmdline->index == 0)

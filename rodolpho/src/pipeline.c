@@ -43,7 +43,7 @@ void	pipeline_child_process(t_command *command, t_sh_env *shenv, int *fd_pipe, i
 }
 
 // makes a pipe - fork - dup2 cycle
-// runs command in from the subshell (child process)
+// runs command in a subshell (child process)
 // returns read_end of pipe or -1 if error
 int	send_to_pipe(t_command *comm, t_sh_env *shell_env, int fd_in)
 {
@@ -105,12 +105,14 @@ int	run_pipeline(t_list *lst, t_sh_env *shell_env, int n)
 	pipe_left_read_end = 0;
 	while (lst->next)
 	{
-		pipe_left_read_end = send_to_pipe(lst->content, shell_env, pipe_left_read_end);
+		pipe_left_read_end = send_to_pipe(lst->content, shell_env,
+			pipe_left_read_end);
 		if (pipe_left_read_end == -1)
 			return (-1);
 		lst = lst->next;
 	}
-	id_last_command = pipeline_last_command(lst->content, shell_env, pipe_left_read_end);
+	id_last_command = pipeline_last_command(lst->content, shell_env,
+		pipe_left_read_end);
 	if (id_last_command == -1)
 		return (-1);
 	waitpid(id_last_command, &status, 0);
