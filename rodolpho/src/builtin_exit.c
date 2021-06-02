@@ -1,6 +1,6 @@
 #include "header.h"
 
-int	is_numeric(char *str)
+static int	is_numeric(char *str)
 {
 	if (*str == '+' || *str == '-')
 		str++;
@@ -13,7 +13,7 @@ int	is_numeric(char *str)
 	return (1);
 }
 
-void	print_error_msg_numeric(char *arg)
+static void	print_error_msg_numeric(char *arg)
 {
 	ft_putendl_fd("exit", 2);
 	ft_putstr_fd("Minishell: exit: ", 2);
@@ -21,7 +21,7 @@ void	print_error_msg_numeric(char *arg)
 	ft_putendl_fd(": numeric argument required", 2);
 }
 
-int	error_too_many_args(int return_value)
+static int	error_too_many_args(int return_value)
 {
 	ft_putendl_fd("exit", 2);
 	ft_putendl_fd("Minishell: exit: too many arguments", 2);

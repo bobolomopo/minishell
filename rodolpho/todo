@@ -6,8 +6,6 @@ ft_read_line:
 builtins:
 	export (the no args case)
 
-resolve_path:
-	use shell_env PATH
 
 shell:
 	non-interactive shell case (use get_next_line)
