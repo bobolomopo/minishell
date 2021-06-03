@@ -28,6 +28,8 @@
 # define SEMICOLON -3
 # define PIPE -4
 # define SPACE -5
+# define LESS_THAN -6
+# define GREATER_THAN -7
 
 enum	e_states
 {

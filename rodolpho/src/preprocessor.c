@@ -17,6 +17,10 @@ void	text(char **dst, char *line, int *state)
 		*(*dst)++ = DOLLAR_SIGN;
 	else if (*line == ' ')
 		*(*dst)++ = SPACE;
+	else if (*line == '<')
+		*(*dst)++ = LESS_THAN;
+	else if (*line == '>')
+		*(*dst)++ = GREATER_THAN;
 	else if (*line == '\"')
 		*state = s_dquote;
 	else if (*line == '\'')
@@ -67,7 +71,8 @@ void	bslash_in_dquote(char **dst, char *line, int *state)
 
 // returns a freeable string containing the characters of line after
 // interpreting quoting ( "  ' and backslash)
-// spaces, semicolon, dollar-sign and pipe are tagged with negative integers
+// spaces, semicolon, dollar-sign, > , < and pipe are tagged with negative
+// integers
 char	*pre_processor(char *line)
 {
 	char	*dst;

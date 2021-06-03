@@ -37,23 +37,23 @@ t_redirection	*parse_redirection(char *arg)
 	int		n;
 	t_redirection	*red;
 	
-	if (*arg == '<')
+	if (*arg == LESS_THAN)
 		n = 0;
-	else if (*arg == '>')
+	else if (*arg == GREATER_THAN)
 		n = 1;
 	else
 		n = ft_atoi_mv_ptr(&arg);
 
-	if (*arg == '<')
+	if (*arg == LESS_THAN)
 		op = re_input;
 	else
 	{
-		if (*(arg + 1) == '>')
+		if (*(arg + 1) == GREATER_THAN)
 			op = re_output_append;
 		else
 			op = re_output;
 	}
-	while (*arg == '<' || *arg == '>')
+	while (*arg == LESS_THAN || *arg == GREATER_THAN)
 		arg++;
 	file = ft_strdup(arg);
 	red = malloc(sizeof(*red));
@@ -88,7 +88,7 @@ t_list	*get_redirections(t_command *command)
 	i = 0;
 	while (argv[i])
 	{
-		if (ft_strchr(argv[i], '<') || ft_strchr(argv[i], '>'))
+		if (ft_strchr(argv[i], LESS_THAN) || ft_strchr(argv[i], GREATER_THAN))
 		{
 			red = parse_redirection(argv[i]);
 			ft_lstadd_back(&redirections_lst, ft_lstnew(red));
