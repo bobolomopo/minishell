@@ -29,6 +29,82 @@ void	tag_dollar_sign(char **argv)
 	}
 }
 
+//  [n]<file [n]>file [n]>>file
+t_redirection	*parse_redirection(char *arg)
+{
+	char	*file;
+	int		op;
+	int		n;
+	t_redirection	*red;
+	
+	if (*arg == '<')
+		n = 0;
+	else if (*arg == '>')
+		n = 1;
+	else
+		n = ft_atoi_mv_ptr(&arg);
+
+	if (*arg == '<')
+		op = re_input;
+	else
+	{
+		if (*(arg + 1) == '>')
+			op = re_output_append;
+		else
+			op = re_output;
+	}
+	while (*arg == '<' || *arg == '>')
+		arg++;
+	file = ft_strdup(arg);
+	red = malloc(sizeof(*red));
+	red->n = n;
+	red->op = op;
+	red->file = file;
+	return (red);
+}
+
+void	remove_arg(char **argv)
+{
+	int	i;
+
+	i = 0;
+	free(argv[i]);
+	while (argv[i])
+	{
+		argv[i] = argv[i + 1];
+		i++;
+	}
+}
+
+t_list	*get_redirections(t_command *command)
+{
+	char	**argv;
+	int		i;
+	t_redirection	*red;
+	t_list	*redirections_lst;
+
+	redirections_lst = NULL;
+	argv = command->argv;
+	i = 0;
+	while (argv[i])
+	{
+		if (ft_strchr(argv[i], '<') || ft_strchr(argv[i], '>'))
+		{
+			red = parse_redirection(argv[i]);
+			ft_lstadd_back(&redirections_lst, ft_lstnew(red));
+			if (*(red->file) == '\0')
+			{
+				free(red->file);
+				red->file = ft_strdup(argv[i + 1]);
+				remove_arg(&argv[i + 1]);
+			}
+			remove_arg(&argv[i--]);
+		}
+		i++;
+	}
+	return (redirections_lst);
+}
+
 // split a command string into its separate words and store it in a t_command struct
 t_command	*split_command(char *command)
 {
@@ -36,7 +112,7 @@ t_command	*split_command(char *command)
 
 	simple_command = malloc(sizeof(*simple_command));
 	simple_command->argv = ft_split(command, ' ');
-	simple_command->redirections = NULL;
+	simple_command->redirections = get_redirections(simple_command);
 	tag_dollar_sign(simple_command->argv);
 	return (simple_command);
 }
