@@ -77,7 +77,7 @@ char	*get_var_value_part(char **str, t_sh_env *shell_env)
 	if (**str == '?')
 	{
 		(*str)++;
-		return (ft_itoa(shell_env->question_mark)); // NOT SURE... unsigned char x int
+		return (ft_itoa(shell_env->question_mark));
 	}
 	var_name = parse_var_name(str);
 	if (!var_name || !*var_name)
@@ -161,28 +161,3 @@ int	make_var_expansions(t_command *command, t_sh_env *shell_env)
 	return (0);
 }
 
-// stuff of testing
-
-// int	main(int argc, char **argv, char **envp)
-// {
-// 	t_sh_env	shell_env;
-// 	char 	arg[100] = "hello $HOME$_$?bye$NOVAR";
-
-// 	char *ptr = arg;
-// 	while (*ptr)
-// 	{
-// 		if (*ptr == '$')
-// 			*ptr = DOLLAR_SIGN;
-// 		ptr++;
-// 	}
-
-// 	shell_env.envp = envp;
-// 	shell_env.question_mark = 43;
-
-// 	char *str = expand_str(arg, &shell_env);
-// 	printf("%s\n", str);
-// 	free(str);
-
-// 	(void)argc;
-// 	(void)argv;
-// }

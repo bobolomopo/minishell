@@ -30,6 +30,7 @@ the executed commands.
 void	sigquit_handler(int signal_code)
 {
 	(void)signal_code;
+	ft_putendl_fd("Quit: 3", 1);
 }
 
  /*

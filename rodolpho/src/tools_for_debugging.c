@@ -49,3 +49,28 @@ void print_list_commands(t_list *list_of_pipelines)
 // 	launch_command(&command, envp);
 // 	return (0);
 // }
+
+
+// int	main(int argc, char **argv, char **envp)
+// {
+// 	t_sh_env	shell_env;
+// 	char 	arg[100] = "hello $HOME$_$?bye$NOVAR";
+
+// 	char *ptr = arg;
+// 	while (*ptr)
+// 	{
+// 		if (*ptr == '$')
+// 			*ptr = DOLLAR_SIGN;
+// 		ptr++;
+// 	}
+
+// 	shell_env.envp = envp;
+// 	shell_env.question_mark = 43;
+
+// 	char *str = expand_str(arg, &shell_env);
+// 	printf("%s\n", str);
+// 	free(str);
+
+// 	(void)argc;
+// 	(void)argv;
+// }
