@@ -12,22 +12,22 @@
 
 
 // replace all "$" ocurrences by DOLLAR_SIGN
-void	tag_dollar_sign(char **argv)
-{
-	char	*ptr;
+// void	tag_dollar_sign(char **argv)
+// {
+// 	char	*ptr;
 
-	while (*argv)
-	{
-		ptr = *argv;
-		while (*ptr)
-		{
-			if (*ptr == '$')
-				*ptr = DOLLAR_SIGN;
-			ptr++;
-		}
-		argv++;
-	}
-}
+// 	while (*argv)
+// 	{
+// 		ptr = *argv;
+// 		while (*ptr)
+// 		{
+// 			if (*ptr == '$')
+// 				*ptr = DOLLAR_SIGN;
+// 			ptr++;
+// 		}
+// 		argv++;
+// 	}
+// }
 
 //  [n]<file [n]>file [n]>>file
 t_redirection	*parse_redirection(char *arg)
@@ -111,9 +111,8 @@ t_command	*split_command(char *command)
 	t_command	*simple_command;
 
 	simple_command = malloc(sizeof(*simple_command));
-	simple_command->argv = ft_split(command, ' ');
+	simple_command->argv = ft_split(command, SPACE);
 	simple_command->redirections = get_redirections(simple_command);
-	tag_dollar_sign(simple_command->argv);
 	return (simple_command);
 }
 
@@ -127,7 +126,7 @@ t_list	*pipeline2list(char *pipeline)
 	t_command *simple_command;
 
 	lst = NULL;
-	commands = ft_split(pipeline, '|');
+	commands = ft_split(pipeline, PIPE);
 	i = 0;
 	while (commands[i])
 	{
@@ -147,9 +146,16 @@ int	parse_line(char *line, t_list **pipelines_lst)
 	int		i;
 	t_list	*pipeline;
 	t_list	*new;
+	char	*processed_line;
 
 	*pipelines_lst = NULL;
-	array_of_pipelines = ft_split(line, ';');
+
+	processed_line = pre_processor(line);
+	if (!processed_line)
+		return (-1);
+
+	array_of_pipelines = ft_split(processed_line, SEMICOLON);
+	free(processed_line);
 	i = 0;
 	while (array_of_pipelines[i])
 	{
@@ -161,4 +167,3 @@ int	parse_line(char *line, t_list **pipelines_lst)
 	ft_free_split(array_of_pipelines);
 	return (0);
 }
-

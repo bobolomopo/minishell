@@ -21,10 +21,18 @@
 # define CTRL_D 4
 # define ENTER_KEY 10
 
-# define DOLLAR_SIGN -2
-
 # define PROMPT "super_prompt $ "
 # define BUFFER_STEP 100
+
+# define DOLLAR_SIGN -2
+# define SEMICOLON -3
+# define PIPE -4
+# define SPACE -5
+
+enum	e_states
+{
+	s_text, s_dquote, s_squote, s_backslash, s_bslash_in_dquote
+};
 
 typedef struct	s_mem2clear
 {
@@ -105,6 +113,7 @@ void	refresh_display(t_cmdline *cmdline, t_tcaps termcaps);
 
 // mini-parser (for tests)
 
+char	*pre_processor(char *line);
 int		parse_line(char *line, t_list **commands_lst);
 
 // expansion
