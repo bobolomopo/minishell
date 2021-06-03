@@ -52,8 +52,6 @@ typedef struct	s_termcaps
 {
 	char	*cl_line;
 	char	*cl_to_endline;
-	char	*mv_cursor_col1; // can be replaced by a simple "\r"
-	char	*mv_cursor_left; // can be replaced by a simple "\b"
 }				t_tcaps;
 
 typedef struct	s_command
@@ -112,6 +110,7 @@ int		parse_line(char *line, t_list **commands_lst);
 // expansion
 
 int		make_var_expansions(t_command *command, t_sh_env *shell_env);
+char	*expand_str(char *str, t_sh_env *shell_env);
 char	*parse_var_name(char **str);
 
 // execution

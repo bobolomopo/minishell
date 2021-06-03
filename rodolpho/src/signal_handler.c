@@ -33,10 +33,10 @@ void	sigquit_handler(int signal_code)
 	ft_putendl_fd("Quit: 3", 1);
 }
 
- /*
- Defines which signals will be handled.
- OBS: Not sure if this is needed when in non-interactive mode
- */
+/*
+Defines which signals will be handled.
+OBS: Not sure if this is needed when in non-interactive mode
+*/
 void	setup_signal_handlers(void)
 {
 	signal(SIGINT, signal_handler_c);

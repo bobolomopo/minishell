@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   resolve_path.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/03 15:36:47 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/03 15:36:48 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
-char	*assemble_path(char *dir, char *file)
+static char	*assemble_path(char *dir, char *file)
 {
 	char	*str;
 	int		size;
@@ -18,7 +30,7 @@ char	*assemble_path(char *dir, char *file)
 // if bin found, return 1 and path contains the complete path (freeable string)
 // if not found, return 0 and path is NULL.
 // return -1 if error
-int	lookup_bin(char *command, char **path_dirs, char **path)
+static int	lookup_bin(char *command, char **path_dirs, char **path)
 {
 	int			i;
 	struct stat	buf;
@@ -38,8 +50,8 @@ int	lookup_bin(char *command, char **path_dirs, char **path)
 	return (0);
 }
 
-// if command contais "/" or if the binary is found in a PATH directory, return 1 and a
-// a freeable string to path
+// if command contais "/" or if the binary is found in a PATH directory,
+// return 1 and a a freeable string to path
 // return 0 if binary not found
 // return -1 if error
 int	resolve_path(char *command, char **path, char ** envp)

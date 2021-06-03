@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   run_builtin.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/03 15:39:37 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/03 15:39:38 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 // duplicates the file descriptors 0, 1 and 2, to be recovered later.
@@ -45,9 +57,9 @@ int	restore_std_fds(int *fd)
 // retuns index (0 to 6) if the command is a builtin, -1 otherwise
 int	is_builtin(char *command_name)
 {
-	static char*	builtin[7] = {"echo", "cd", "pwd", "export", "unset",
+	static char	*builtin[7] = {"echo", "cd", "pwd", "export", "unset",
 	"env", "exit"};
-	int	i;
+	int			i;
 
 	i = 0;
 	while (i < 7)
@@ -63,9 +75,9 @@ int	is_builtin(char *command_name)
 // indexes must match those in is_builtin()
 int	call_builtin(int builtin_index, char **argv, t_sh_env *shell_env)
 {
-	static int (*f[7])(char **, t_sh_env *) = {builtin_echo, builtin_cd,
+	static	int	(*f[7])(char **, t_sh_env *) = {builtin_echo, builtin_cd,
 	builtin_pwd, builtin_export, builtin_unset, builtin_env, builtin_exit};
-	
+
 	return (f[builtin_index](argv, shell_env));
 }
 

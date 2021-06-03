@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/03 15:15:12 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/03 15:15:13 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 int	line_is_blank(char *line)
@@ -29,7 +41,7 @@ void	add_to_history(char *line, t_list **history)
 	ft_lstadd_front(history, elem);
 }
 
-int	initialize_shell(char **envp, t_sh_env *shenv, t_list **history, t_tcaps *tc)
+int	init_shell(char **envp, t_sh_env *shenv, t_list **history, t_tcaps *tc)
 {
 	setup_signal_handlers();
 	if (init_termcaps(tc) == -1)
@@ -51,7 +63,7 @@ int	main(int argc, char **argv, char **envp)
 	t_tcaps		termcaps;
 	t_sh_env	shell_env;
 
-	if (initialize_shell(envp, &shell_env, &history, &termcaps) == -1)
+	if (init_shell(envp, &shell_env, &history, &termcaps) == -1)
 		return (1);
 	while (42)
 	{
@@ -59,11 +71,9 @@ int	main(int argc, char **argv, char **envp)
 			return (clear_mem_exit(&shell_env, 1));
 		add_to_history(line, &history);
 		shell_env.mem2clear.history = history;
-	
-		parse_line(line, &pipelines_lst); // lexer - parser
+		parse_line(line, &pipelines_lst);
 		shell_env.mem2clear.pipelines_lst = pipelines_lst;
-
-		execute_line(pipelines_lst, &shell_env); // execute all pipelines
+		execute_line(pipelines_lst, &shell_env);
 		ft_lstclear(&pipelines_lst, clear_pipeline);
 	}
 	(void)argc;

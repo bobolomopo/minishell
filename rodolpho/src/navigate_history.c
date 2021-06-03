@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   navigate_history.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: rcammaro <rcammaro@student.s19.be>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/06/03 15:21:52 by rcammaro          #+#    #+#             */
+/*   Updated: 2021/06/03 15:21:53 by rcammaro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "header.h"
 
 // returns pointer to list element before elem
@@ -22,7 +34,7 @@ int	backup_buffer(t_cmdline *cmdline)
 	cmdline->backup_buffer = ft_strdup(cmdline->buffer);
 	if (!cmdline->backup_buffer)
 	{
-		ft_perror("backup_buffer");
+		ft_perror("ft_strdup");
 		return (-1);
 	}
 	return (0);
@@ -44,6 +56,9 @@ NULL: none, new command being typed
 
 /*
 returns -1 if error, 1 otherwise (caller expects that)
+Does nothing if history is empty or if position is already at its last element
+If moving from the new command to the first item in history, the current buffer
+if copied to a backup.
 */
 int	arrow_up(t_cmdline *cmdline, t_list *history, t_tcaps termcaps)
 {
@@ -51,7 +66,7 @@ int	arrow_up(t_cmdline *cmdline, t_list *history, t_tcaps termcaps)
 		return (1);
 	if (cmdline->position && cmdline->position->next == NULL)
 		return (1);
-	if (cmdline->position == NULL) // current command, not in history
+	if (cmdline->position == NULL)
 	{
 		if (backup_buffer(cmdline) == -1)
 			return (-1);
@@ -66,11 +81,14 @@ int	arrow_up(t_cmdline *cmdline, t_list *history, t_tcaps termcaps)
 }
 
 // always returns 1 (caller expects that)
+// Does nothing if position if the current command.
+// If moving from first (most recent) item in history to current command,
+// the buffer is restored form its backup.
 int	arrow_down(t_cmdline *cmdline, t_list *history, t_tcaps termcaps)
 {
 	if (cmdline->position == NULL)
 		return (1);
-	if (cmdline->position == history) // first item in history
+	if (cmdline->position == history)
 	{
 		restore_buffer(cmdline);
 		refresh_display(cmdline, termcaps);
