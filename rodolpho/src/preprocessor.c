@@ -1,12 +1,19 @@
 #include "header.h"
 
+static int	is_valid_char4varname(char c)
+{
+	if (ft_isalpha(c) || c == '_' || c == '?')
+		return (1);
+	return (0);
+}
+
 void	text(char **dst, char *line, int *state)
 {
 	if (*line == ';')
 		*(*dst)++ = SEMICOLON;
 	else if (*line == '|')
 		*(*dst)++ = PIPE;
-	else if (*line == '$')
+	else if (*line == '$' && is_valid_char4varname(line[1]))
 		*(*dst)++ = DOLLAR_SIGN;
 	else if (*line == ' ')
 		*(*dst)++ = SPACE;
@@ -14,13 +21,15 @@ void	text(char **dst, char *line, int *state)
 		*state = s_dquote;
 	else if (*line == '\'')
 		*state = s_squote;
+	else if (*line == '\\')
+		*state = s_backslash;
 	else
 		*(*dst)++ = *line;
 }
 
 void	dquote(char **dst, char *line, int *state)
 {
-	if (*line == '$')
+	if (*line == '$' && is_valid_char4varname(line[1]))
 		*(*dst)++ = DOLLAR_SIGN;
 	else if (*line == '\"')
 		*state = s_text;
@@ -56,6 +65,9 @@ void	bslash_in_dquote(char **dst, char *line, int *state)
 	*state = s_dquote;
 }
 
+// returns a freeable string containing the characters of line after
+// interpreting quoting ( "  ' and backslash)
+// spaces, semicolon, dollar-sign and pipe are tagged with negative integers
 char	*pre_processor(char *line)
 {
 	char	*dst;
@@ -72,6 +84,7 @@ char	*pre_processor(char *line)
 		f[state](&ptr, line, &state);
 		line++;
 	}
+	*ptr = '\0';
 	if (state != s_text)
 	{
 		ft_putendl_fd("Syntax error", 2);

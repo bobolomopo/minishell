@@ -6,7 +6,7 @@
 /*   By: rcammaro <rcammaro@student.s19.be>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/03 15:12:52 by rcammaro          #+#    #+#             */
-/*   Updated: 2021/06/03 15:12:53 by rcammaro         ###   ########.fr       */
+/*   Updated: 2021/06/03 21:55:57 by rcammaro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,23 +53,51 @@ static int	contains_dollar(char *str)
 // check for DOLLAR_SIGN in every word, and replace word by another one
 // with the expanded variable
 // Returns -1 if error, 0 upon success.
-int	make_var_expansions(t_command *command, t_sh_env *shell_env)
+int	make_var_expansions_args(char **argv, t_sh_env *shell_env)
 {
-	char	**arg;
 	char	*new_arg;
 
-	arg = command->argv;
-	while (*arg)
+	while (*argv)
 	{
-		if (contains_dollar(*arg))
+		if (contains_dollar(*argv))
 		{
-			new_arg = expand_str(*arg, shell_env);
+			new_arg = expand_str(*argv, shell_env);
 			if (!new_arg)
 				return (-1);
-			free(*arg);
-			*arg = new_arg;
+			free(*argv);
+			*argv = new_arg;
 		}
-		arg++;
+		argv++;
 	}
+	return (0);
+}
+
+int	make_var_expansions_redirs(t_list *redirs_lst, t_sh_env *shenv)
+{
+	t_redirection	*red;
+	char			*new_str;
+
+	while (redirs_lst)
+	{
+		red = redirs_lst->content;
+		if (contains_dollar(red->file))
+		{
+			new_str = expand_str(red->file, shenv);
+			if (!new_str)
+				return (-1);
+			free(red->file);
+			red->file = new_str;
+		}
+		redirs_lst = redirs_lst->next;
+	}
+	return (0);
+}
+
+int	make_var_expansions(t_command *command, t_sh_env *shenv)
+{
+	if (make_var_expansions_args(command->argv, shenv) == -1)
+		return (-1);
+	if (make_var_expansions_redirs(command->redirections, shenv) == -1)
+		return (-1);
 	return (0);
 }
