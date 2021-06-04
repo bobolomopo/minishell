@@ -1,4 +1,7 @@
-
+Idea:
+	Drop the t_command struct and use simply a char **argv containing arguments and redirections
+	When running a command, after making variable expansion, use get_redirections to build a 
+	list of redirections
 
 ft_read_line:
 	write double-linked list funcions for libft and use them for history navigation

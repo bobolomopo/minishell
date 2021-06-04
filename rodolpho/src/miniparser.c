@@ -76,15 +76,15 @@ void	remove_arg(char **argv)
 	}
 }
 
-t_list	*get_redirections(t_command *command)
+// returns a list of t_redirections
+// removes the strings from argv that were related to a redirection
+t_list	*get_redirections(char **argv)
 {
-	char	**argv;
 	int		i;
 	t_redirection	*red;
 	t_list	*redirections_lst;
 
 	redirections_lst = NULL;
-	argv = command->argv;
 	i = 0;
 	while (argv[i])
 	{
@@ -112,7 +112,7 @@ t_command	*split_command(char *command)
 
 	simple_command = malloc(sizeof(*simple_command));
 	simple_command->argv = ft_split(command, SPACE);
-	simple_command->redirections = get_redirections(simple_command);
+	simple_command->redirections = get_redirections(simple_command->argv);
 	return (simple_command);
 }
 
