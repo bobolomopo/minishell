@@ -6,7 +6,7 @@
 #    By: rcammaro <rcammaro@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/03/18 16:39:22 by rcammaro          #+#    #+#              #
-#    Updated: 2021/04/07 13:14:49 by rcammaro         ###   ########.fr        #
+#    Updated: 2021/07/25 18:42:26 by rcammaro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,16 +31,12 @@ CFLAGS		= 	-Wall -Wextra -Werror
 
 NAME = libft.a
 FT_CORE = libft_core/libft.a
-FT_PRINTF = ft_printf/libftprintf.a
 
 all:			$(NAME)
 
-$(NAME):		$(FT_PRINTF) $(GNL_OBJS) $(ADD_ONS_OBJS)
-				cp $(FT_PRINTF) $@
+$(NAME):		$(FT_CORE) $(GNL_OBJS) $(ADD_ONS_OBJS)
+				cp $(FT_CORE) $@
 				ar -rcs $@ $(GNL_OBJS) $(ADD_ONS_OBJS)
-
-$(FT_PRINTF):	$(FT_CORE)
-				$(MAKE) -C ft_printf
 
 $(FT_CORE):		
 				$(MAKE) bonus -C libft_core
@@ -49,7 +45,7 @@ $(FT_CORE):
 				$(CC) $(CFLAGS) $(INCLUDES) -o $@ -c $<
 
 clean:
-				$(MAKE) fclean -C ft_printf
+				$(MAKE) fclean -C libft_core
 				rm -f $(GNL_OBJS) $(ADD_ONS_OBJS)
 
 fclean:			clean

@@ -3,32 +3,72 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: jandre <Ajuln@hotmail.fr>                  +#+  +:+       +#+         #
+#    By: rcammaro <rcammaro@student.s19.be>         +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2021/05/06 16:30:05 by jandre            #+#    #+#              #
-#    Updated: 2021/05/06 16:30:05 by jandre           ###   ########.fr        #
+#    Created: 2021/07/25 19:12:10 by rcammaro          #+#    #+#              #
+#    Updated: 2021/07/26 16:47:55 by rcammaro         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+SRCS =	builtin_cd.c \
+		builtin_exit.c \
+		builtin_export.c \
+		builtins_env_echo_pwd_unset.c \
+		clear_memory.c \
+		env_setup.c \
+		env_utils.c \
+		error.c \
+		execute_binary.c \
+		execute_line.c \
+		expansion_2.c \
+		expansion.c \
+		here_doc.c \
+		here_doc_2.c \
+		main.c \
+		parse_redirections_2.c \
+		parse_redirections.c \
+		parser_split_by_pipe.c \
+		pipeline.c \
+		preprocessor.c \
+		redirections.c \
+		resolve_path.c \
+		run_builtin.c \
+		set_var.c \
+		signal_handler.c
+
+SRC = $(addprefix src/,$(SRCS))
+OBJ = $(SRC:.c=.o)
+LIBFT = libft/libft.a
+INCLUDES = -I include -I libft -I /Users/$(USER)/.brew/opt/readline/include
+LIBS = -lft -L libft -lreadline -L /Users/$(USER)/.brew/opt/readline/lib
+HEADER = include/header.h
 CC = gcc
 FLAGS = -Wall -Wextra -Werror
+NAME = minishell
 
-all: minishell
+all:		$(NAME)
 
-utils:
-	make -C utils/
+$(NAME):	$(LIBFT) $(OBJ)	
+			$(CC) $(FLAGS) $(OBJ) $(LIBS) -o $@
 
-minishell: utils
-	$(CC) $(FLAGS) main.c utils/minishell.a -o $@
+$(LIBFT):	
+			$(MAKE) all clean -C libft/
+
+%.o:		%.c $(HEADER)
+			$(CC) $(FLAGS) -c $(INCLUDES) $< -o $@
 
 clean:
-	make clean -C utils
+			rm -f $(OBJ)
 
-fclean:
-	make fclean -C utils
-	rm -rf minishell
+fclean:		clean
+			rm -f $(NAME) $(LIBFT)
 
-re: fclean
-	make
+readline-debian:
+			apt install libreadline-dev
 
-.PHONY: checker push_swap clean fclean re utils
+readline-brew:
+			brew install readline
+
+re:			fclean all 
+
+.PHONY:		all clean fclean readline re
